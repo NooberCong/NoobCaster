@@ -11,6 +11,7 @@ class WeatherData extends Weather {
   final int sunrise;
   final int sunset;
   final int humidity;
+  final String displayName;
   final String description;
   final String icon;
   final List<HourlyWeatherData> hourly;
@@ -22,6 +23,7 @@ class WeatherData extends Weather {
       @required this.sunrise,
       @required this.sunset,
       @required this.humidity,
+      @required this.displayName,
       @required this.description,
       @required this.icon,
       @required this.hourly,
@@ -34,6 +36,7 @@ class WeatherData extends Weather {
         sunset,
         humidity,
         description,
+        displayName,
         icon,
         hourly,
         daily
@@ -41,10 +44,10 @@ class WeatherData extends Weather {
 }
 
 class HourlyWeatherData extends Weather {
-  final int temp;
+  final double temp;
   final int humidity;
+  final int unixtime;
   final String icon;
-  final String unixtime;
   HourlyWeatherData(
       {@required this.temp,
       @required this.humidity,
@@ -56,11 +59,11 @@ class HourlyWeatherData extends Weather {
 }
 
 class DailyWeatherData extends Weather {
-  final int minTemp;
-  final int maxTemp;
+  final double minTemp;
+  final double maxTemp;
   final int humidity;
+  final int unixtime;
   final String icon;
-  final String unixtime;
 
   DailyWeatherData(
       {@required this.minTemp,

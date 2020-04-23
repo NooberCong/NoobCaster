@@ -21,6 +21,7 @@ void main() {
       daily: [],
       hourly: [],
       description: "Clear sky",
+      displayName: "Tay Ninh",
       humidity: 32,
       icon: "01d",
       sunrise: 1586558776,

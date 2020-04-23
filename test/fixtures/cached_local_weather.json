@@ -1,0 +1,18 @@
+{
+    "current": {
+        "temp": 34.2,
+        "uvi": 13.2,
+        "sunrise": 1586558776,
+        "sunset": 1586603197,
+        "humidity": 32,
+        "weather": [
+            {
+                "icon": "01d",
+                "description": "Clear sky"
+            }
+        ]
+    },
+    "daily": [],
+    "hourly": [],
+    "displayName": "Tay Ninh"
+}

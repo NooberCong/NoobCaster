@@ -1,0 +1,38 @@
+[
+    {
+        "current": {
+            "temp": 36.2,
+            "uvi": 16.2,
+            "sunrise": 1586558776,
+            "sunset": 1586603197,
+            "humidity": 99,
+            "weather": [
+                {
+                    "icon": "01d",
+                    "description": "Sand storm"
+                }
+            ]
+        },
+        "daily": [],
+        "hourly": [],
+        "displayName": "Katau"
+    },
+    {
+        "current": {
+            "temp": 12.2,
+            "uvi": 2.2,
+            "sunrise": 1586558776,
+            "sunset": 1586603197,
+            "humidity": 11,
+            "weather": [
+                {
+                    "icon": "04d",
+                    "description": "Snowy sky"
+                }
+            ]
+        },
+        "daily": [],
+        "hourly": [],
+        "displayName": "Canada Hills"
+    }
+]

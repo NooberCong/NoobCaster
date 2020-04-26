@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.I;
 
-void init() async {
+Future<void> init() async {
   //Features - WeatherData
   sl.registerFactory(
       () => WeatherDataBloc(inputValidator: sl(), local: sl(), location: sl()));
@@ -31,8 +31,10 @@ void init() async {
       geolocator: sl(),
       networkInfo: sl()));
   //Data sources
-  sl.registerLazySingleton<LocalWeatherDataSource>(() => LocalWeatherDataSourceImpl(sharedPreferences: sl()));
-  sl.registerLazySingleton<RemoteWeatherDataSource>(() => RemoteWeatherDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<LocalWeatherDataSource>(
+      () => LocalWeatherDataSourceImpl(sharedPreferences: sl()));
+  sl.registerLazySingleton<RemoteWeatherDataSource>(
+      () => RemoteWeatherDataSourceImpl(client: sl()));
   //External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);

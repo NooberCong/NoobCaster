@@ -33,6 +33,7 @@ void main() {
   final WeatherDataModel model = WeatherDataModel(
       currentTemp: 34.2,
       daily: [],
+      windspeed: 8.4,
       displayName: "Tay Ninh",
       hourly: [],
       description: "Clear sky",
@@ -218,6 +219,7 @@ void main() {
     });
     final String tLocation = "Tay Ninh";
     final WeatherDataModel model = WeatherDataModel(
+        windspeed: 8.4,
         currentTemp: 34.2,
         daily: [],
         hourly: [],
@@ -326,7 +328,8 @@ void main() {
     });
     test("Should return cache failure when localDataSource fails", () async {
       //arrange
-      when(mockLocalWeatherDataSource.getCachedLocationWeatherData()).thenThrow(CacheError());
+      when(mockLocalWeatherDataSource.getCachedLocationWeatherData())
+          .thenThrow(CacheError());
       //act
       final result = await repository.getCachedLocationWeather();
       //assert

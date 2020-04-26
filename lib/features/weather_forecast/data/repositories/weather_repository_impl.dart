@@ -73,11 +73,11 @@ class WeatherRepositoryImpl implements WeatherRepository {
   @override
   Future<Either<Failure, List<WeatherData>>> getCachedLocationWeather() async {
     try {
-      final cachedLocationWeatherData = await localDataSource.getCachedLocationWeatherData();
+      final cachedLocationWeatherData =
+          await localDataSource.getCachedLocationWeatherData();
       return Right(cachedLocationWeatherData);
     } on Exception {
       return Left(CacheFailure());
     }
   }
-
 }

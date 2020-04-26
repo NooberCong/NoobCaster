@@ -10,7 +10,9 @@ import 'package:noobcaster/features/weather_forecast/domain/usecases/get_locatio
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
 
 class MockGetLocalWeatherData extends Mock implements GetLocalWeatherData {}
+
 class MockInputValidator extends Mock implements InputValidator {}
+
 class MockGetLocationWeatherData extends Mock
     implements GetLocationWeatherData {}
 
@@ -21,6 +23,7 @@ void main() {
   MockInputValidator mockInputValidator;
   final city = "Tay Ninh";
   final data = WeatherData(
+      windspeed: 8.4,
       currentTemp: 12.2,
       daily: [],
       description: "hot",
@@ -36,11 +39,13 @@ void main() {
     mockGetLocalWeatherData = MockGetLocalWeatherData();
     mockGetLocationWeatherData = MockGetLocationWeatherData();
     bloc = WeatherDataBloc(
-        inputValidator: mockInputValidator, local: mockGetLocalWeatherData, location: mockGetLocationWeatherData);
+        inputValidator: mockInputValidator,
+        local: mockGetLocalWeatherData,
+        location: mockGetLocationWeatherData);
   });
-  test('Initial state should be weatherdataloading', () {
+  test('Initial state should be WeatherDataInitial', () {
     //assert
-    expect(bloc.initialState, WeatherDataLoading());
+    expect(bloc.initialState, WeatherDataInitial());
   });
   group('GetLocalWeatherData', () {
     test("Should call getlocation usecase", () async {
@@ -50,11 +55,14 @@ void main() {
       //assert
       verify(mockGetLocalWeatherData(NoParams()));
     });
-    test("Should emit [WeatherDataLoading, WeatherDataLoaded] when call is successful", () async {
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataLoaded] when call is successful",
+        () async {
       //arrange
       when(mockGetLocalWeatherData(any)).thenAnswer((_) async => Right(data));
       //assert later
       final expectedStates = [
+        WeatherDataInitial(),
         WeatherDataLoading(),
         WeatherDataLoaded(data: data)
       ];
@@ -62,11 +70,15 @@ void main() {
       //act
       bloc.add(GetLocalWeatherEvent());
     });
-    test("Should emit [WeatherDataLoading, WeatherDataError] when call is unsuccessful", () async {
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataError] when call is unsuccessful",
+        () async {
       //arrange
-      when(mockGetLocalWeatherData(any)).thenAnswer((_) async => Left(ServerFailure()));
+      when(mockGetLocalWeatherData(any))
+          .thenAnswer((_) async => Left(ServerFailure()));
       //assert later
       final expectedStates = [
+        WeatherDataInitial(),
         WeatherDataLoading(),
         WeatherDataError(message: SERVER_FAILURE_MESSAGE)
       ];
@@ -74,11 +86,15 @@ void main() {
       //act
       bloc.add(GetLocalWeatherEvent());
     });
-    test("Should emit [WeatherDataLoading, WeatherDataError] with the right error messsage when call is unsuccessful", () async {
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataError] with the right error messsage when call is unsuccessful",
+        () async {
       //arrange
-      when(mockGetLocalWeatherData(any)).thenAnswer((_) async => Left(CacheFailure()));
+      when(mockGetLocalWeatherData(any))
+          .thenAnswer((_) async => Left(CacheFailure()));
       //assert later
       final expectedStates = [
+        WeatherDataInitial(),
         WeatherDataLoading(),
         WeatherDataError(message: CACHE_FAILURE_MESSAGE)
       ];
@@ -86,7 +102,6 @@ void main() {
       //act
       bloc.add(GetLocalWeatherEvent());
     });
-
   });
   group("GetLocationWeatherData", () {
     test('Should return InputFailure when validation fails', () {
@@ -94,6 +109,7 @@ void main() {
       when(mockInputValidator.validate(any)).thenReturn(false);
       //assert later
       final expectedStates = [
+        WeatherDataInitial(),
         WeatherDataLoading(),
         WeatherDataError(message: INPUT_FAILURE_MESSAGE)
       ];
@@ -110,12 +126,16 @@ void main() {
       //assert
       verify(mockGetLocationWeatherData(Params(location: city)));
     });
-    test("Should emit [WeatherDataLoading, WeatherDataLoaded] when call is successful", () async {
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataLoaded] when call is successful",
+        () async {
       //arrange
       when(mockInputValidator.validate(any)).thenReturn(true);
-      when(mockGetLocationWeatherData(any)).thenAnswer((_) async => Right(data));
+      when(mockGetLocationWeatherData(any))
+          .thenAnswer((_) async => Right(data));
       //assert later
       final expectedStates = [
+        WeatherDataInitial(),
         WeatherDataLoading(),
         WeatherDataLoaded(data: data)
       ];
@@ -123,12 +143,16 @@ void main() {
       //act
       bloc.add(GetLocationWeatherEvent(city));
     });
-    test("Should emit [WeatherDataLoading, WeatherDataError] when call is unsuccessful", () async {
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataError] when call is unsuccessful",
+        () async {
       //arrange
       when(mockInputValidator.validate(any)).thenReturn(true);
-      when(mockGetLocationWeatherData(any)).thenAnswer((_) async => Left(ServerFailure()));
+      when(mockGetLocationWeatherData(any))
+          .thenAnswer((_) async => Left(ServerFailure()));
       //assert later
       final expectedStates = [
+        WeatherDataInitial(),
         WeatherDataLoading(),
         WeatherDataError(message: SERVER_FAILURE_MESSAGE)
       ];
@@ -136,12 +160,16 @@ void main() {
       //act
       bloc.add(GetLocationWeatherEvent(city));
     });
-    test("Should emit [WeatherDataLoading, WeatherDataError] with the right error messsage when call is unsuccessful", () async {
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataError] with the right error messsage when call is unsuccessful",
+        () async {
       //arrange
       when(mockInputValidator.validate(any)).thenReturn(true);
-      when(mockGetLocationWeatherData(any)).thenAnswer((_) async => Left(CacheFailure()));
+      when(mockGetLocationWeatherData(any))
+          .thenAnswer((_) async => Left(CacheFailure()));
       //assert later
       final expectedStates = [
+        WeatherDataInitial(),
         WeatherDataLoading(),
         WeatherDataError(message: CACHE_FAILURE_MESSAGE)
       ];

@@ -34,18 +34,18 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
         getLocalWeatherData = local,
         getLocationWeatherData = location;
   @override
-  WeatherDataState get initialState => WeatherDataLoading();
+  WeatherDataState get initialState => WeatherDataInitial();
 
   @override
   Stream<WeatherDataState> mapEventToState(
     WeatherDataEvent event,
   ) async* {
     if (event is GetLocationWeatherEvent) {
+      yield WeatherDataLoading();
       final isValid = validator.validate(event.location);
       if (!isValid) {
         yield WeatherDataError(message: INPUT_FAILURE_MESSAGE);
       } else {
-        print("No error found");
         final failureOrData =
             await getLocationWeatherData(Params(location: event.location));
         yield failureOrData.fold(
@@ -54,6 +54,7 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
             (data) => WeatherDataLoaded(data: data));
       }
     } else if (event is GetLocalWeatherEvent) {
+      yield WeatherDataLoading();
       final failureOrData = await getLocalWeatherData(NoParams());
       yield failureOrData.fold(
           (failure) => WeatherDataError(message: _mapFailureToMessage(failure)),

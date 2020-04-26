@@ -18,6 +18,7 @@ void main() {
   final tLocation = "Tay Ninh";
   final tWeatherData = WeatherData(
       currentTemp: 34.2,
+      windspeed: 8.4,
       daily: [],
       hourly: [],
       description: "Clear sky",

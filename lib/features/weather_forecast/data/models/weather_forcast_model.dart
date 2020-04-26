@@ -7,6 +7,8 @@ class WeatherDataModel extends WeatherData {
   WeatherDataModel(
       {@required double currentTemp,
       @required double uvi,
+      @required double windspeed,
+      @required int unixtime,
       @required int sunrise,
       @required int sunset,
       @required String displayName,
@@ -18,6 +20,8 @@ class WeatherDataModel extends WeatherData {
       : super(
             currentTemp: currentTemp,
             uvi: uvi,
+            windspeed: windspeed,
+            unixtime: unixtime,
             sunrise: sunrise,
             displayName: displayName,
             sunset: sunset,
@@ -26,15 +30,18 @@ class WeatherDataModel extends WeatherData {
             icon: icon,
             hourly: hourly,
             daily: daily);
-  factory WeatherDataModel.fromJson(Map<String, dynamic> json, {String displayName}) {
+  factory WeatherDataModel.fromJson(Map<String, dynamic> json,
+      {String displayName}) {
     return WeatherDataModel(
         currentTemp: json["current"]["temp"],
         uvi: json["current"]["uvi"],
+        windspeed: (json["current"]["wind_speed"] as num).toDouble(),
+        unixtime: json["current"]["dt"],
         sunset: json["current"]["sunset"],
         sunrise: json["current"]["sunrise"],
         icon: json["current"]["weather"][0]["icon"],
         humidity: json["current"]["humidity"],
-        displayName: displayName?? json["displayName"],
+        displayName: displayName ?? json["displayName"],
         description: json["current"]["weather"][0]["description"],
         hourly: (json["hourly"] as List<dynamic>)
             .map((hour) => HourlyWeatherDataModel.fromJson(hour))
@@ -45,9 +52,12 @@ class WeatherDataModel extends WeatherData {
   }
   Map<String, dynamic> toJson() {
     return {
+      "displayName": displayName,
       "current": {
         "temp": currentTemp,
         "uvi": uvi,
+        "dt": unixtime,
+        "wind_speed": windspeed,
         "sunset": sunset,
         "sunrise": sunrise,
         "humidity": humidity,
@@ -55,8 +65,11 @@ class WeatherDataModel extends WeatherData {
           {"icon": icon, "description": description},
         ]
       },
-      "hourly": hourly.map((hour) => (hour as HourlyWeatherDataModel).toJson()).toList(),
-      "daily": daily.map((day) => (day as DailyWeatherDataModel).toJson()).toList()
+      "hourly": hourly
+          .map((hour) => (hour as HourlyWeatherDataModel).toJson())
+          .toList(),
+      "daily":
+          daily.map((day) => (day as DailyWeatherDataModel).toJson()).toList()
     };
   }
 }

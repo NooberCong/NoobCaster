@@ -18,25 +18,44 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
   RemoteWeatherDataSourceImpl({@required this.client});
   @override
   Future<WeatherDataModel> getLocalWeatherData(Placemark placemark) async {
-    return await _getWeatherData(placemark.position.latitude, placemark.position.longitude);
+    return await _getWeatherData(
+      placemark.position.latitude,
+      placemark.position.longitude,
+      _getValidDisplayName(placemark.locality, placemark.name),
+    );
   }
 
   @override
   Future<WeatherDataModel> getLocationWeatherData(Placemark placemark) async {
-    return await _getWeatherData(placemark.position.latitude, placemark.position.longitude);
+    return await _getWeatherData(
+      placemark.position.latitude,
+      placemark.position.longitude,
+      _getValidDisplayName(placemark.locality, placemark.name),
+    );
   }
 
-  Future<WeatherDataModel> _getWeatherData(double lat, double lon) async {
+  Future<WeatherDataModel> _getWeatherData(
+      double lat, double lon, String displayName) async {
     final response = await client.get(
         Uri.http("api.openweathermap.org", "/data/2.5/onecall", {
           "lon": lon.toString(),
           "lat": lat.toString(),
-          "appid": API_KEY
+          "appid": API_KEY,
         }),
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
-      return WeatherDataModel.fromJson(json.decode(response.body));
+      return WeatherDataModel.fromJson(json.decode(response.body),
+          displayName: displayName);
     }
     throw ServerError();
+  }
+
+  _getValidDisplayName(String locality, String name) {
+    if (locality.length > 0) {
+      return locality;
+    } else if (name.length > 0) {
+      return name;
+    }
+    return "Unknown";
   }
 }

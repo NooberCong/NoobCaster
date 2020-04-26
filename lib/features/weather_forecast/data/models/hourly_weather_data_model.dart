@@ -13,7 +13,7 @@ class HourlyWeatherDataModel extends HourlyWeatherData {
     return HourlyWeatherDataModel(
         humidity: json["humidity"],
         icon: json["weather"][0]["icon"],
-        temp: json["temp"],
+        temp: (json["temp"] as num).toDouble(),
         unixtime: json["dt"]);
   }
   Map<String, dynamic> toJson() {

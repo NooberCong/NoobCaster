@@ -3,6 +3,7 @@
         "current": {
             "temp": 36.2,
             "uvi": 16.2,
+            "wind_speed": 12.3,
             "sunrise": 1586558776,
             "sunset": 1586603197,
             "humidity": 99,

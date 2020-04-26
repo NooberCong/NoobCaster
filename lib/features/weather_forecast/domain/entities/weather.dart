@@ -8,6 +8,8 @@ abstract class Weather extends Equatable {
 class WeatherData extends Weather {
   final double currentTemp;
   final double uvi;
+  final double windspeed;
+  final int unixtime;
   final int sunrise;
   final int sunset;
   final int humidity;
@@ -20,6 +22,8 @@ class WeatherData extends Weather {
   WeatherData(
       {@required this.currentTemp,
       @required this.uvi,
+      @required this.windspeed,
+      @required this.unixtime,
       @required this.sunrise,
       @required this.sunset,
       @required this.humidity,
@@ -32,6 +36,7 @@ class WeatherData extends Weather {
   List<Object> get props => [
         currentTemp,
         uvi,
+        windspeed,
         sunrise,
         sunset,
         humidity,
@@ -55,7 +60,7 @@ class HourlyWeatherData extends Weather {
       @required this.unixtime});
 
   @override
-  List<Object> get props => [temp, humidity, icon];
+  List<Object> get props => [temp, humidity, icon, unixtime];
 }
 
 class DailyWeatherData extends Weather {

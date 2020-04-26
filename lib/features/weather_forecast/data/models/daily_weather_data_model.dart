@@ -19,8 +19,8 @@ class DailyWeatherDataModel extends DailyWeatherData {
         humidity: json["humidity"],
         icon: json["weather"][0]["icon"],
         unixtime: json["dt"],
-        maxTemp: json["temp"]["max"],
-        minTemp: json["temp"]["min"]);
+        maxTemp: (json["temp"]["max"] as num).toDouble(),
+        minTemp: (json["temp"]["min"] as num).toDouble());
   }
   Map<String, dynamic> toJson() {
     return {
@@ -28,7 +28,7 @@ class DailyWeatherDataModel extends DailyWeatherData {
       "weather": [
         {"icon": icon}
       ],
-      "unixtime": unixtime,
+      "dt": unixtime,
       "temp": {"max": maxTemp, "min": minTemp}
     };
   }

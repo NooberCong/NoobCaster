@@ -18,6 +18,7 @@ void main() {
   final tWeatherData = WeatherData(
       currentTemp: 34.2,
       displayName: "Tay Ninh",
+      windspeed: 8.4,
       daily: [],
       hourly: [],
       description: "Clear sky",

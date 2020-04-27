@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:noobcaster/core/network/network_info.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
+import 'package:noobcaster/core/util/time_zone_handler.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/local_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/remote_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/repositories/weather_repository_impl.dart';
@@ -23,7 +24,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetLocalWeatherData(repository: sl()));
   sl.registerLazySingleton(() => GetLocationWeatherData(repository: sl()));
   //Core
-  sl.registerLazySingleton(() => InputValidator());
+  sl.registerLazySingleton<InputValidator>(() => InputValidatorImpl());
   //Repository
   sl.registerLazySingleton<WeatherRepository>(() => WeatherRepositoryImpl(
       remoteDataSource: sl(),
@@ -34,9 +35,10 @@ Future<void> init() async {
   sl.registerLazySingleton<LocalWeatherDataSource>(
       () => LocalWeatherDataSourceImpl(sharedPreferences: sl()));
   sl.registerLazySingleton<RemoteWeatherDataSource>(
-      () => RemoteWeatherDataSourceImpl(client: sl()));
+      () => RemoteWeatherDataSourceImpl(client: sl(), timezoneHandler: sl()));
   //External
   final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<TimezoneHandler>(() => TimezoneHandlerImpl());
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => Geolocator());

@@ -22,17 +22,19 @@ void main() {
   MockGetLocationWeatherData mockGetLocationWeatherData;
   MockInputValidator mockInputValidator;
   final city = "Tay Ninh";
+  final dateTime = DateTime(1212, 12, 12, 12, 12);
   final data = WeatherData(
       windspeed: 8.4,
       currentTemp: 12.2,
       daily: [],
+      dateTime: dateTime,
       description: "hot",
       displayName: "Tay Ninh",
       hourly: [],
       humidity: 32,
       icon: "02d",
-      sunrise: 39483948,
-      sunset: 3094389,
+      sunrise: dateTime,
+      sunset: dateTime,
       uvi: 10.0);
   setUp(() {
     mockInputValidator = MockInputValidator();

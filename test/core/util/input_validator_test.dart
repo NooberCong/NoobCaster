@@ -4,7 +4,7 @@ import 'package:noobcaster/core/util/input_validator.dart';
 void main() {
   InputValidator inputValidator;
   setUp(() {
-    inputValidator = InputValidator();
+    inputValidator = InputValidatorImpl();
   });
   test('Should return false when string is empty', () {
     //act

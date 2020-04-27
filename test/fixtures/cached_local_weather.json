@@ -1,19 +1,15 @@
 {
-    "current": {
-        "temp": 34.2,
-        "uvi": 13.2,
-        "wind_speed": 12.3,
-        "sunrise": 1586558776,
-        "sunset": 1586603197,
-        "humidity": 32,
-        "weather": [
-            {
-                "icon": "01d",
-                "description": "Clear sky"
-            }
-        ]
-    },
+    "temp": 34.2,
+    "uvi": 13.2,
+    "wind_speed": 12.3,
+    "sunrise": "1212-12-12 12:12:00.000",
+    "sunset": "1212-12-12 12:12:00.000",
+    "humidity": 32,
+    "icon": "01d",
+    "description": "Clear sky",
     "daily": [],
     "hourly": [],
-    "displayName": "Tay Ninh"
+    "displayName": "Tay Ninh",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "datetime": "1212-12-12 12:12:00.000"
 }

@@ -11,6 +11,7 @@ class MockWeatherRepository extends Mock implements WeatherRepository {}
 void main() {
   GetLocalWeatherData usecase;
   MockWeatherRepository mockWeatherRepository;
+  final dateTime = DateTime(1212, 12, 12, 12, 12);
   setUp(() {
     mockWeatherRepository = MockWeatherRepository();
     usecase = GetLocalWeatherData(repository: mockWeatherRepository);
@@ -18,14 +19,15 @@ void main() {
   final tWeatherData = WeatherData(
       currentTemp: 34.2,
       displayName: "Tay Ninh",
+      dateTime: dateTime,
       windspeed: 8.4,
       daily: [],
       hourly: [],
       description: "Clear sky",
       humidity: 32,
       icon: "01d",
-      sunrise: 1586558776,
-      sunset: 1586603197,
+      sunrise: dateTime,
+      sunset: dateTime,
       uvi: 13.2);
   test("Should get local weather data from the repository", () async {
     //arrange

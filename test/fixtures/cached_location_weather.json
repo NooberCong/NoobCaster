@@ -1,39 +1,30 @@
 [
     {
-        "current": {
-            "temp": 36.2,
-            "uvi": 16.2,
-            "wind_speed": 12.3,
-            "sunrise": 1586558776,
-            "sunset": 1586603197,
-            "humidity": 99,
-            "weather": [
-                {
-                    "icon": "01d",
-                    "description": "Sand storm"
-                }
-            ]
-        },
+        "temp": 36.2,
+        "uvi": 16.2,
+        "wind_speed": 12.3,
+        "sunrise": "1212-12-12 12:12:00.000",
+        "sunset": "1212-12-12 12:12:00.000",
+        "humidity": 99,
+        "icon": "01d",
+        "description": "Sand storm",
         "daily": [],
         "hourly": [],
+        "datetime": "1212-12-12 12:12:00.000",
         "displayName": "Katau"
     },
     {
-        "current": {
-            "temp": 12.2,
-            "uvi": 2.2,
-            "sunrise": 1586558776,
-            "sunset": 1586603197,
-            "humidity": 11,
-            "weather": [
-                {
-                    "icon": "04d",
-                    "description": "Snowy sky"
-                }
-            ]
-        },
+        "temp": 12.2,
+        "uvi": 2.2,
+        "wind_speed": 12.3,
+        "sunrise": "1212-12-12 12:12:00.000",
+        "sunset": "1212-12-12 12:12:00.000",
+        "humidity": 11,
+        "icon": "04d",
+        "description": "Snowy sky",
         "daily": [],
         "hourly": [],
+        "datetime": "1212-12-12 12:12:00.000",
         "displayName": "Canada Hills"
     }
 ]

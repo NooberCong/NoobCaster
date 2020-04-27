@@ -29,16 +29,16 @@ class DetailsSnapshot extends StatelessWidget {
             children: <Widget>[
               DetailBar(
                 data: data.uvi.toString(),
-                label: "UV level",
+                label: "UV",
                 icon: "uv-details",
               ),
               DetailBar(
-                data: getHourAndMinute(data.sunrise),
+                data: formattedHourAndMinute(data.sunrise),
                 label: "Sunrise",
                 icon: "sunrise-details",
               ),
               DetailBar(
-                data: getHourAndMinute(data.sunset),
+                data: formattedHourAndMinute(data.sunset),
                 label: "Sunset",
                 icon: "sunset-details",
               ),

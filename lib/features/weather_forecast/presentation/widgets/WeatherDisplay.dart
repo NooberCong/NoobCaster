@@ -28,7 +28,7 @@ class WeatherDisplay extends StatelessWidget {
                   fontWeight: FontWeight.w500),
               children: [
                 TextSpan(
-                  text: "${formatDescription(data.description)}",
+                  text: formattedTime(data.dateTime),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -59,7 +59,7 @@ class WeatherDisplay extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: userGreetingBasedOnTime(data.unixtime),
+                text: formatDescription(data.description),
                 style: TextStyle(
                     fontSize: 18,
                     color: Theme.of(context).accentColor,
@@ -77,12 +77,12 @@ class WeatherDisplay extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               DataSnapshot(
-                textUpper: "Uvi level",
+                textUpper: "Uv level",
                 textLower: "${getUviLevel(data.uvi)}",
-                icon: SvgPicture.asset(
-                  "assets/images/uv.svg",
-                  width: 36,
-                  height: 36,
+                icon: FaIcon(
+                  FontAwesomeIcons.sun,
+                  size: 36,
+                  color: Colors.white,
                 ),
               ),
               DataSnapshot(

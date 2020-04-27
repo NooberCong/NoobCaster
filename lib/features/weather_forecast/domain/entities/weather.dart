@@ -6,12 +6,12 @@ abstract class Weather extends Equatable {
 }
 
 class WeatherData extends Weather {
+  final DateTime dateTime;
+  final DateTime sunrise;
+  final DateTime sunset;
   final double currentTemp;
   final double uvi;
   final double windspeed;
-  final int unixtime;
-  final int sunrise;
-  final int sunset;
   final int humidity;
   final String displayName;
   final String description;
@@ -20,10 +20,10 @@ class WeatherData extends Weather {
   final List<DailyWeatherData> daily;
 
   WeatherData(
-      {@required this.currentTemp,
+      {@required this.dateTime,
+      @required this.currentTemp,
       @required this.uvi,
       @required this.windspeed,
-      @required this.unixtime,
       @required this.sunrise,
       @required this.sunset,
       @required this.humidity,
@@ -51,23 +51,23 @@ class WeatherData extends Weather {
 class HourlyWeatherData extends Weather {
   final double temp;
   final int humidity;
-  final int unixtime;
+  final int hour;
   final String icon;
   HourlyWeatherData(
       {@required this.temp,
       @required this.humidity,
       @required this.icon,
-      @required this.unixtime});
+      @required this.hour});
 
   @override
-  List<Object> get props => [temp, humidity, icon, unixtime];
+  List<Object> get props => [temp, humidity, icon, hour];
 }
 
 class DailyWeatherData extends Weather {
   final double minTemp;
   final double maxTemp;
   final int humidity;
-  final int unixtime;
+  final int weekday;
   final String icon;
 
   DailyWeatherData(
@@ -75,7 +75,7 @@ class DailyWeatherData extends Weather {
       @required this.maxTemp,
       @required this.humidity,
       @required this.icon,
-      @required this.unixtime});
+      @required this.weekday});
   @override
-  List<Object> get props => [minTemp, maxTemp, humidity, icon, unixtime];
+  List<Object> get props => [minTemp, maxTemp, humidity, icon, weekday];
 }

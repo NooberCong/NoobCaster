@@ -165,7 +165,7 @@ class HourlyForecastColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            getHourFromUnix(data.unixtime),
+            formattedHour(data.hour),
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
           SvgPicture.asset("assets/images/${data.icon}.svg",
@@ -221,7 +221,7 @@ class DailyForecastColumn extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(getDayOfWeekFromUnix(data.unixtime),
+          Text(dayOfWeek(data.weekday),
               style: TextStyle(color: Colors.white, fontSize: 16)),
           SvgPicture.asset("assets/images/${data.icon}.svg",
               width: 50, height: 50),

@@ -16,7 +16,9 @@ void main() {
     usecase = GetLocationWeatherData(repository: mockWeatherRepository);
   });
   final tLocation = "Tay Ninh";
+  final dateTime = DateTime(1212, 12, 12, 12, 12);
   final tWeatherData = WeatherData(
+      dateTime: dateTime,
       currentTemp: 34.2,
       windspeed: 8.4,
       daily: [],
@@ -25,8 +27,8 @@ void main() {
       displayName: "Tay Ninh",
       humidity: 32,
       icon: "01d",
-      sunrise: 1586558776,
-      sunset: 1586603197,
+      sunrise: dateTime,
+      sunset: dateTime,
       uvi: 13.2);
   test("Should get location weather data from the repository", () async {
     //arrange

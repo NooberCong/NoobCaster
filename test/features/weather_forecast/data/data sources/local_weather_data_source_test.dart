@@ -20,7 +20,7 @@ void main() {
     localWeatherDataSource = LocalWeatherDataSourceImpl(sharedPreferences: mockSharedPreferences);
   });
   group("getCachedLocalWeatherData", () {
-    final cachedWeatherData = WeatherDataModel.fromJson(json.decode(fixture("cached_local_weather.json")));
+    final cachedWeatherData = WeatherDataModel.fromCacheJson(json.decode(fixture("cached_local_weather.json")));
     test("Should get data from shared preferences when there is data", () async {
       //arrange
       when(mockSharedPreferences.getString(any)).thenReturn(fixture("cached_local_weather.json"));
@@ -40,7 +40,7 @@ void main() {
     });
   });
   group("getCachedLocationWeatherData", () {
-    final cachedWeatherData = (json.decode(fixture("cached_location_weather.json")) as List<dynamic>).map((entry) => WeatherDataModel.fromJson(entry)).toList();
+    final cachedWeatherData = (json.decode(fixture("cached_location_weather.json")) as List<dynamic>).map((entry) => WeatherDataModel.fromCacheJson(entry)).toList();
     test("Should get location weather data when there is data", () async {
       //arrange
       when(mockSharedPreferences.getString(any)).thenReturn(fixture("cached_location_weather.json"));
@@ -59,7 +59,7 @@ void main() {
       expect(() => call(), throwsA(TypeMatcher<CacheError>()));
     });
     group("cacheLocalWeatherData", () {
-      final model = WeatherDataModel.fromJson(json.decode(fixture("cached_local_weather.json")));
+      final model = WeatherDataModel.fromCacheJson(json.decode(fixture("cached_local_weather.json")));
       test("Should call toJson method and cache weather data", () {
         //act
         localWeatherDataSource.cacheLocalWeatherData(model);
@@ -68,8 +68,8 @@ void main() {
       });
     });
     group("cacheLocationWeatherData", () {
-      final modelList = (json.decode(fixture("cached_location_weather.json")) as List<dynamic>).map((entry) => WeatherDataModel.fromJson(entry)).toList();
-      final model = WeatherDataModel.fromJson(json.decode(fixture("cached_local_weather.json")));
+      final modelList = (json.decode(fixture("cached_location_weather.json")) as List<dynamic>).map((entry) => WeatherDataModel.fromCacheJson(entry)).toList();
+      final model = WeatherDataModel.fromCacheJson(json.decode(fixture("cached_local_weather.json")));
       test("Should call toJson method and cache weather data", () {
         //arrange
         modelList.add(model);

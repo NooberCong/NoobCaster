@@ -30,17 +30,19 @@ void main() {
   MockGeolocator mockGeolocator;
   final position = Position(latitude: 11.3, longitude: 4.3);
   final placemarks = [Placemark(name: "Tay Ninh", position: position)];
+  final dateTime = DateTime(1212, 12, 12, 12, 12);
   final WeatherDataModel model = WeatherDataModel(
       currentTemp: 34.2,
       daily: [],
       windspeed: 8.4,
+      dateTime: dateTime,
       displayName: "Tay Ninh",
       hourly: [],
       description: "Clear sky",
       humidity: 32,
       icon: "01d",
-      sunrise: 1586558776,
-      sunset: 1586603197,
+      sunrise: dateTime,
+      sunset: dateTime,
       uvi: 13.2);
   final modelList = [model];
   setUp(() {
@@ -221,14 +223,15 @@ void main() {
     final WeatherDataModel model = WeatherDataModel(
         windspeed: 8.4,
         currentTemp: 34.2,
+        dateTime: dateTime,
         daily: [],
         hourly: [],
         displayName: "Tay Ninh",
         description: "Clear sky",
         humidity: 32,
         icon: "01d",
-        sunrise: 1586558776,
-        sunset: 1586603197,
+        sunrise: dateTime,
+        sunset: dateTime,
         uvi: 13.2);
     test("should check if device is online", () async {
       //arrange
@@ -251,6 +254,15 @@ void main() {
         await repository.getLocationWeather(tLocation);
         //assert
         verify(mockGeolocator.placemarkFromAddress(tLocation));
+      });
+      test("Should return InputFailure when no placemark matched", () async {
+        //arrange
+        when(mockGeolocator.placemarkFromAddress(any))
+            .thenAnswer((_) async => []);
+        //act
+        final result = await repository.getLocationWeather(tLocation);
+        //assert
+        expect(result, Left(InputFailure()));
       });
       test("Should pass placemark to remotedatasource", () async {
         //act

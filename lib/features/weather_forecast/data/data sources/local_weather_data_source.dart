@@ -4,7 +4,6 @@ import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 abstract class LocalWeatherDataSource {
   Future<WeatherDataModel> getCachedLocalWeatherData();
   Future<List<WeatherDataModel>> getCachedLocationWeatherData();
@@ -31,16 +30,16 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
         sharedPreferences.getString(CACHED_LOCATION_WEATHER_DATA);
     if (cachedData != null) {
       final locationWeatherData = (json.decode(cachedData) as List<dynamic>)
-          .map((entry) => WeatherDataModel.fromJson(entry))
+          .map((entry) => WeatherDataModel.fromCacheJson(entry))
           .toList();
       locationWeatherData.add(model);
       return sharedPreferences.setString(
           CACHED_LOCATION_WEATHER_DATA,
           json.encode(
               locationWeatherData.map((entry) => entry.toJson()).toList()));
-    }
-    else {
-      return sharedPreferences.setString(CACHED_LOCATION_WEATHER_DATA, json.encode([model.toJson()]));
+    } else {
+      return sharedPreferences.setString(
+          CACHED_LOCATION_WEATHER_DATA, json.encode([model.toJson()]));
     }
   }
 
@@ -48,7 +47,8 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
   Future<WeatherDataModel> getCachedLocalWeatherData() {
     final cachedData = sharedPreferences.getString(CACHED_LOCAL_WEATHER_DATA);
     if (cachedData != null) {
-      return Future.value(WeatherDataModel.fromJson(json.decode(cachedData)));
+      return Future.value(
+          WeatherDataModel.fromCacheJson(json.decode(cachedData)));
     } else {
       throw CacheError();
     }
@@ -56,11 +56,12 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
 
   @override
   Future<List<WeatherDataModel>> getCachedLocationWeatherData() {
+    sharedPreferences.setString(CACHED_LOCATION_WEATHER_DATA, json.encode([]));
     final cachedData =
         sharedPreferences.getString(CACHED_LOCATION_WEATHER_DATA);
     if (cachedData != null) {
       final locationWeatherData = (json.decode(cachedData) as List<dynamic>)
-          .map((entry) => WeatherDataModel.fromJson(entry))
+          .map((entry) => WeatherDataModel.fromCacheJson(entry))
           .toList();
       return Future.value(locationWeatherData);
     } else {

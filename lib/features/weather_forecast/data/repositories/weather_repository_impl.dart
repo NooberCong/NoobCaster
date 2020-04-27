@@ -59,6 +59,9 @@ class WeatherRepositoryImpl implements WeatherRepository {
     if (isOnline) {
       try {
         final placemarks = await geolocator.placemarkFromAddress(location);
+        if (_isEmpty(placemarks)) {
+          return Left(InputFailure());
+        }
         final weatherData =
             await remoteDataSource.getLocationWeatherData(placemarks[0]);
         localDataSource.cacheLocationWeatherData(weatherData);
@@ -79,5 +82,9 @@ class WeatherRepositoryImpl implements WeatherRepository {
     } on Exception {
       return Left(CacheFailure());
     }
+  }
+
+  bool _isEmpty(List<Placemark> placemarks) {
+    return placemarks.length == 0;
   }
 }

@@ -1,5 +1,7 @@
 [
     {
+        "isLocal": true,
+        "isCached": true,
         "temp": 36.2,
         "uvi": 16.2,
         "wind_speed": 12.3,
@@ -14,6 +16,8 @@
         "displayName": "Katau"
     },
     {
+        "isLocal": true,
+        "isCached": true,
         "temp": 12.2,
         "uvi": 2.2,
         "wind_speed": 12.3,

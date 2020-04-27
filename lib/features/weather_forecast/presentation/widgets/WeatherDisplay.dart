@@ -129,7 +129,8 @@ class WeatherDisplay extends StatelessWidget {
           child: Align(
               alignment: Alignment.bottomRight,
               child: Text(
-                "Updated ${getCurrentTime()}",
+                (data.isCached ? "Cached " : "Updated ") +
+                    formattedTime(data.dateTime),
                 style: TextStyle(color: Colors.white, fontSize: 12),
               )),
         )

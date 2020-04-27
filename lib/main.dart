@@ -90,7 +90,7 @@ class HomeScreen extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: RefreshIndicator(
-              onRefresh: () => Future.value(null),
+              onRefresh: () => Future.sync(() => BlocProvider.of<WeatherDataBloc>(context).add(RefreshWeatherDataEvent(BlocProvider.of<WeatherDataBloc>(context).state))),
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Column(

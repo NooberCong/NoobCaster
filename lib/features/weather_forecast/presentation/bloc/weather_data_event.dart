@@ -15,3 +15,11 @@ class GetLocationWeatherEvent extends WeatherDataEvent {
   @override
   List<Object> get props => [];
 }
+
+class RefreshWeatherDataEvent extends WeatherDataEvent {
+  final WeatherDataState currentState;
+
+  RefreshWeatherDataEvent(this.currentState);
+  @override
+  List<Object> get props => [currentState];
+}

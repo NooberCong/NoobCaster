@@ -6,6 +6,8 @@ abstract class Weather extends Equatable {
 }
 
 class WeatherData extends Weather {
+  final bool isLocal;
+  final bool isCached;
   final DateTime dateTime;
   final DateTime sunrise;
   final DateTime sunset;
@@ -20,7 +22,9 @@ class WeatherData extends Weather {
   final List<DailyWeatherData> daily;
 
   WeatherData(
-      {@required this.dateTime,
+      {@required this.isCached,
+      @required this.isLocal,
+      @required this.dateTime,
       @required this.currentTemp,
       @required this.uvi,
       @required this.windspeed,

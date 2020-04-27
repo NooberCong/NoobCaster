@@ -1,4 +1,6 @@
 {
+    "isLocal": true,
+    "isCached": true,
     "temp": 34.2,
     "uvi": 13.2,
     "wind_speed": 12.3,

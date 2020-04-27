@@ -19,15 +19,6 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
       {@required this.client, @required this.timezoneHandler});
   @override
   Future<WeatherDataModel> getLocalWeatherData(Placemark placemark) async {
-    return await _weatherDataOrThrowError(placemark);
-  }
-
-  @override
-  Future<WeatherDataModel> getLocationWeatherData(Placemark placemark) async {
-    return await _weatherDataOrThrowError(placemark);
-  }
-
-  Future<WeatherDataModel> _weatherDataOrThrowError(Placemark placemark) async {
     final displayName =
         _getValidDisplayName(placemark.locality, placemark.name);
     final response = await _responseFromServer(placemark.position);
@@ -36,6 +27,23 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
         json.decode(response.body),
         displayName: displayName,
         handler: timezoneHandler,
+        isLocal: true,
+      );
+    }
+    throw ServerError();
+  }
+
+  @override
+  Future<WeatherDataModel> getLocationWeatherData(Placemark placemark) async {
+    final displayName =
+        _getValidDisplayName(placemark.locality, placemark.name);
+    final response = await _responseFromServer(placemark.position);
+    if (response.statusCode == 200) {
+      return WeatherDataModel.fromServerJsonWithTimezone(
+        json.decode(response.body),
+        displayName: displayName,
+        handler: timezoneHandler,
+        isLocal: false,
       );
     }
     throw ServerError();

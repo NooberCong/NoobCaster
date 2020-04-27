@@ -42,24 +42,41 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
   ) async* {
     if (event is GetLocationWeatherEvent) {
       yield WeatherDataLoading();
-      final isValid = validator.validate(event.location);
-      if (!isValid) {
-        yield WeatherDataError(message: INPUT_FAILURE_MESSAGE);
-      } else {
-        final failureOrData =
-            await getLocationWeatherData(Params(location: event.location));
-        yield failureOrData.fold(
-            (failure) =>
-                WeatherDataError(message: _mapFailureToMessage(failure)),
-            (data) => WeatherDataLoaded(data: data));
-      }
+      yield* getLocationWeatherResult(event.location);
     } else if (event is GetLocalWeatherEvent) {
       yield WeatherDataLoading();
-      final failureOrData = await getLocalWeatherData(NoParams());
+      yield* getLocalWeatherResult();
+    } else if (event is RefreshWeatherDataEvent) {
+      final state = event.currentState;
+      if (state is WeatherDataLoaded) {
+        yield WeatherDataLoading();
+        if (state.data.isLocal) {
+          yield* getLocalWeatherResult();
+        } else {
+          yield* getLocationWeatherResult(state.data.displayName);
+        }
+      }
+    }
+  }
+
+  Stream<WeatherDataState> getLocationWeatherResult(String location) async* {
+    final isValid = validator.validate(location);
+    if (!isValid) {
+      yield WeatherDataError(message: INPUT_FAILURE_MESSAGE);
+    } else {
+      final failureOrData =
+          await getLocationWeatherData(Params(location: location));
       yield failureOrData.fold(
           (failure) => WeatherDataError(message: _mapFailureToMessage(failure)),
           (data) => WeatherDataLoaded(data: data));
     }
+  }
+
+  Stream<WeatherDataState> getLocalWeatherResult() async* {
+    final failureOrData = await getLocalWeatherData(NoParams());
+    yield failureOrData.fold(
+        (failure) => WeatherDataError(message: _mapFailureToMessage(failure)),
+        (data) => WeatherDataLoaded(data: data));
   }
 
   String _mapFailureToMessage(Failure failure) {

@@ -6,7 +6,9 @@ import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dar
 
 class WeatherDataModel extends WeatherData {
   WeatherDataModel(
-      {@required DateTime dateTime,
+      {@required bool isLocal,
+      @required bool isCached,
+      @required DateTime dateTime,
       @required DateTime sunrise,
       @required DateTime sunset,
       @required double currentTemp,
@@ -19,6 +21,8 @@ class WeatherDataModel extends WeatherData {
       @required List<HourlyWeatherData> hourly,
       @required List<DailyWeatherData> daily})
       : super(
+            isCached: isCached,
+            isLocal: isLocal,
             dateTime: dateTime,
             currentTemp: currentTemp,
             uvi: uvi,
@@ -32,8 +36,10 @@ class WeatherDataModel extends WeatherData {
             hourly: hourly,
             daily: daily);
   factory WeatherDataModel.fromServerJsonWithTimezone(Map<String, dynamic> json,
-      {String displayName, TimezoneHandler handler}) {
+      {String displayName, TimezoneHandler handler, bool isLocal}) {
     return WeatherDataModel(
+        isLocal: isLocal,
+        isCached: false,
         currentTemp: json["current"]["temp"],
         uvi: json["current"]["uvi"],
         windspeed: (json["current"]["wind_speed"] as num).toDouble(),
@@ -68,6 +74,8 @@ class WeatherDataModel extends WeatherData {
   }
   factory WeatherDataModel.fromCacheJson(Map<String, dynamic> json) {
     return WeatherDataModel(
+        isCached: json["isCached"],
+        isLocal: json["isLocal"],
         currentTemp: json["temp"],
         uvi: json["uvi"],
         windspeed: (json["wind_speed"] as num).toDouble(),
@@ -87,6 +95,8 @@ class WeatherDataModel extends WeatherData {
   }
   Map<String, dynamic> toJson() {
     return {
+      "isCached": true,
+      "isLocal": isLocal,
       "datetime": dateTime.toString().substring(0, 19),
       "displayName": displayName,
       "temp": currentTemp,

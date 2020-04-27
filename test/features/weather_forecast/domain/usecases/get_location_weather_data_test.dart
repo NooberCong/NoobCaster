@@ -18,6 +18,8 @@ void main() {
   final tLocation = "Tay Ninh";
   final dateTime = DateTime(1212, 12, 12, 12, 12);
   final tWeatherData = WeatherData(
+      isCached: false,
+      isLocal: true,
       dateTime: dateTime,
       currentTemp: 34.2,
       windspeed: 8.4,

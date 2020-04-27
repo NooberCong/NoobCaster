@@ -17,6 +17,8 @@ void main() {
     usecase = GetLocalWeatherData(repository: mockWeatherRepository);
   });
   final tWeatherData = WeatherData(
+      isCached: false,
+      isLocal: true,
       currentTemp: 34.2,
       displayName: "Tay Ninh",
       dateTime: dateTime,

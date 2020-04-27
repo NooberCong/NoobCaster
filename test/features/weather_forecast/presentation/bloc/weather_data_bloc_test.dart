@@ -23,7 +23,24 @@ void main() {
   MockInputValidator mockInputValidator;
   final city = "Tay Ninh";
   final dateTime = DateTime(1212, 12, 12, 12, 12);
-  final data = WeatherData(
+  final localData = WeatherData(
+      isCached: false,
+      isLocal: true,
+      windspeed: 8.4,
+      currentTemp: 12.2,
+      daily: [],
+      dateTime: dateTime,
+      description: "hot",
+      displayName: "Tay Ninh",
+      hourly: [],
+      humidity: 32,
+      icon: "02d",
+      sunrise: dateTime,
+      sunset: dateTime,
+      uvi: 10.0);
+  final locationData = WeatherData(
+      isCached: false,
+      isLocal: false,
       windspeed: 8.4,
       currentTemp: 12.2,
       daily: [],
@@ -61,12 +78,13 @@ void main() {
         "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataLoaded] when call is successful",
         () async {
       //arrange
-      when(mockGetLocalWeatherData(any)).thenAnswer((_) async => Right(data));
+      when(mockGetLocalWeatherData(any))
+          .thenAnswer((_) async => Right(localData));
       //assert later
       final expectedStates = [
         WeatherDataInitial(),
         WeatherDataLoading(),
-        WeatherDataLoaded(data: data)
+        WeatherDataLoaded(data: localData)
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
@@ -104,6 +122,22 @@ void main() {
       //act
       bloc.add(GetLocalWeatherEvent());
     });
+    test(
+        "Should emit [WeatherDataLoaded, WeatherDataLoading, WeatherDataLoaded] in refresh event",
+        () {
+      //arrange
+      when(mockGetLocalWeatherData(any))
+          .thenAnswer((_) async => Right(localData));
+      //assert later
+      final expectedStates = [
+        WeatherDataInitial(),
+        WeatherDataLoading(),
+        WeatherDataLoaded(data: localData)
+      ];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(RefreshWeatherDataEvent(WeatherDataLoaded(data: localData)));
+    });
   });
   group("GetLocationWeatherData", () {
     test('Should return InputFailure when validation fails', () {
@@ -134,12 +168,12 @@ void main() {
       //arrange
       when(mockInputValidator.validate(any)).thenReturn(true);
       when(mockGetLocationWeatherData(any))
-          .thenAnswer((_) async => Right(data));
+          .thenAnswer((_) async => Right(locationData));
       //assert later
       final expectedStates = [
         WeatherDataInitial(),
         WeatherDataLoading(),
-        WeatherDataLoaded(data: data)
+        WeatherDataLoaded(data: locationData)
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
@@ -178,6 +212,23 @@ void main() {
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
       bloc.add(GetLocationWeatherEvent(city));
+    });
+    test(
+        "Should emit [WeatherDataLoaded, WeatherDataLoading, WeatherDataLoaded] in refresh event",
+        () {
+      //arrange
+      when(mockInputValidator.validate(any)).thenReturn(true);
+      when(mockGetLocationWeatherData(any))
+          .thenAnswer((_) async => Right(locationData));
+      //assert later
+      final expectedStates = [
+        WeatherDataInitial(),
+        WeatherDataLoading(),
+        WeatherDataLoaded(data: locationData)
+      ];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(RefreshWeatherDataEvent(WeatherDataLoaded(data: locationData)));
     });
   });
 }

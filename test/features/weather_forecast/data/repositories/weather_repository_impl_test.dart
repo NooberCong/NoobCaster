@@ -32,6 +32,8 @@ void main() {
   final placemarks = [Placemark(name: "Tay Ninh", position: position)];
   final dateTime = DateTime(1212, 12, 12, 12, 12);
   final WeatherDataModel model = WeatherDataModel(
+      isCached: false,
+      isLocal: true,
       currentTemp: 34.2,
       daily: [],
       windspeed: 8.4,
@@ -221,6 +223,8 @@ void main() {
     });
     final String tLocation = "Tay Ninh";
     final WeatherDataModel model = WeatherDataModel(
+        isCached: false,
+        isLocal: true,
         windspeed: 8.4,
         currentTemp: 34.2,
         dateTime: dateTime,

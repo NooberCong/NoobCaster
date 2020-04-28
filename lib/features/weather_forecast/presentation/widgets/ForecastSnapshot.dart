@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,8 +19,12 @@ class ForecastSnapshot<T> extends StatefulWidget {
 class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
   bool showLeftScroll = false;
   bool showRightScroll = true;
+  double dataMax;
   @override
   void initState() {
+    dataMax = T == HourlyWeatherData
+        ? _getMaxTemp(widget.data as List<HourlyWeatherData>)
+        : _getMaxRange(widget.data as List<DailyWeatherData>);
     _controller.addListener(() {
       if (!_controller.position.atEdge) {
         if (!showLeftScroll || !showRightScroll) {
@@ -96,12 +100,12 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
                   itemBuilder: (context, index) {
                     if (T == HourlyWeatherData) {
                       return HourlyForecastColumn(
-                        data: (widget.data[index] as HourlyWeatherData),
-                      );
+                          data: (widget.data[index] as HourlyWeatherData),
+                          maxTemp: dataMax);
                     } else {
                       return DailyForecastColumn(
-                        data: (widget.data[index] as DailyWeatherData),
-                      );
+                          data: (widget.data[index] as DailyWeatherData),
+                          maxRange: dataMax);
                     }
                   },
                 ),
@@ -143,6 +147,17 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
     _controller.position.animateTo(_controller.position.minScrollExtent,
         duration: Duration(milliseconds: 50 * length), curve: Curves.easeInOut);
   }
+
+  double _getMaxRange(List<DailyWeatherData> data) {
+    return data
+        .map((day) => day.maxTemp - day.minTemp)
+        .toList()
+        .reduce(math.max);
+  }
+
+  double _getMaxTemp(List<HourlyWeatherData> data) {
+    return data.map((hour) => hour.temp).toList().reduce(math.max);
+  }
 }
 
 String _getSnapshotDescription<T>(int length) {
@@ -154,8 +169,11 @@ String _getSnapshotDescription<T>(int length) {
 }
 
 class HourlyForecastColumn extends StatelessWidget {
+  final double maxTemp;
   final HourlyWeatherData data;
-  const HourlyForecastColumn({Key key, @required this.data}) : super(key: key);
+  const HourlyForecastColumn(
+      {Key key, @required this.data, @required this.maxTemp})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +188,7 @@ class HourlyForecastColumn extends StatelessWidget {
           ),
           SvgPicture.asset("assets/images/${data.icon}.svg",
               height: 50, width: 50),
-          TempVisualizer(temp: data.temp),
+          TempVisualizer(temp: data.temp, max: maxTemp),
         ],
       ),
     );
@@ -179,7 +197,9 @@ class HourlyForecastColumn extends StatelessWidget {
 
 class TempVisualizer extends StatelessWidget {
   final double temp;
-  const TempVisualizer({Key key, @required this.temp}) : super(key: key);
+  final double max;
+  const TempVisualizer({Key key, @required this.temp, @required this.max})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +219,7 @@ class TempVisualizer extends StatelessWidget {
         ),
         Container(
           width: 5,
-          height: temp / 7.5,
+          height: temp / max * (MediaQuery.of(context).size.height / 14),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(10),
@@ -212,7 +232,10 @@ class TempVisualizer extends StatelessWidget {
 
 class DailyForecastColumn extends StatelessWidget {
   final DailyWeatherData data;
-  const DailyForecastColumn({Key key, @required this.data}) : super(key: key);
+  final double maxRange;
+  const DailyForecastColumn(
+      {Key key, @required this.data, @required this.maxRange})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -228,6 +251,7 @@ class DailyForecastColumn extends StatelessWidget {
           TempRangeVisualizer(
             maxTemp: data.maxTemp,
             minTemp: data.minTemp,
+            max: maxRange,
           ),
         ],
       ),
@@ -238,8 +262,12 @@ class DailyForecastColumn extends StatelessWidget {
 class TempRangeVisualizer extends StatelessWidget {
   final double minTemp;
   final double maxTemp;
+  final double max;
   const TempRangeVisualizer(
-      {Key key, @required this.minTemp, @required this.maxTemp})
+      {Key key,
+      @required this.minTemp,
+      @required this.maxTemp,
+      @required this.max})
       : super(key: key);
 
   @override
@@ -253,11 +281,17 @@ class TempRangeVisualizer extends StatelessWidget {
           height: 5,
         ),
         Container(
-          width: 5,
-          height: max(maxTemp - minTemp, 5.0) * 4,
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(10),
+          height: MediaQuery.of(context).size.height / 3.5 - 200,
+          child: Center(
+            child: Container(
+              width: 5,
+              height: math.max((maxTemp - minTemp) / max, 0.5) *
+                  (MediaQuery.of(context).size.height / 15),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
           ),
         ),
         SizedBox(

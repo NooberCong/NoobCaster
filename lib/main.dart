@@ -90,7 +90,10 @@ class HomeScreen extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: RefreshIndicator(
-              onRefresh: () => Future.sync(() => BlocProvider.of<WeatherDataBloc>(context).add(RefreshWeatherDataEvent(BlocProvider.of<WeatherDataBloc>(context).state))),
+              onRefresh: () => Future.sync(() =>
+                  BlocProvider.of<WeatherDataBloc>(context).add(
+                      RefreshWeatherDataEvent(
+                          BlocProvider.of<WeatherDataBloc>(context).state))),
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Column(
@@ -109,10 +112,13 @@ class HomeScreen extends StatelessWidget {
                           return Padding(
                             padding: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.height / 2 -
-                                    246),
-                            child: CupertinoActivityIndicator(
-                              animating: true,
-                              radius: 15.0,
+                                    146 -
+                                    15),
+                            child: Center(
+                              child: CupertinoActivityIndicator(
+                                animating: true,
+                                radius: 15.0,
+                              ),
                             ),
                           );
                         } else if (state is WeatherDataLoaded) {

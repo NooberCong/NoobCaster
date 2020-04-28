@@ -34,6 +34,7 @@ class SearchRoute extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TypeAheadField(
+                hideOnEmpty: true,
                 textFieldConfiguration: TextFieldConfiguration(
                   decoration: InputDecoration(focusedBorder: InputBorder.none),
                   onSubmitted: (input) => _searchLocation(input, context),
@@ -42,7 +43,7 @@ class SearchRoute extends StatelessWidget {
                   autofocus: true,
                 ),
                 suggestionsCallback: (text) =>
-                    text.length > 0 ? _getCities(text) : null,
+                    text.length > 0 ? _getSuggestionText(text) : null,
                 itemBuilder: (context, suggestion) {
                   return Ink(
                     child: ListTile(
@@ -51,16 +52,13 @@ class SearchRoute extends StatelessWidget {
                         color: Colors.white,
                         width: 2,
                       ),
-                      title: Text(
-                        suggestion,
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      title: suggestion["widget"],
                     ),
                     color: Colors.grey.shade900,
                   );
                 },
                 onSuggestionSelected: (suggestion) =>
-                    _searchLocation(suggestion, context),
+                    _searchLocation(suggestion["text"], context),
               ),
             ),
             SvgPicture.asset("assets/images/search.svg"),
@@ -70,16 +68,37 @@ class SearchRoute extends StatelessWidget {
     );
   }
 
-  Iterable<String> _getCities(String text) {
-    final results = cityList
+  Iterable<Map<String, dynamic>> _getSuggestionText(String text) {
+    return cityList
         .where((city) =>
             RegExp(text, caseSensitive: false).matchAsPrefix(city) != null)
-        .take(5);
-    return results.length > 0 ? results : null;
+        .take(10)
+        .map(
+          (match) => {
+            "text": match,
+            "widget": RichText(
+              text: TextSpan(
+                text: match.substring(0, text.length),
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 20,
+                ),
+                children: [
+                  TextSpan(
+                    text: match.substring(text.length),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          },
+        );
   }
 
   void _searchLocation(String value, BuildContext context) {
-    print("Submmited");
     BlocProvider.of<WeatherDataBloc>(context)
         .add(GetLocationWeatherEvent(value));
     Navigator.of(context).pop();

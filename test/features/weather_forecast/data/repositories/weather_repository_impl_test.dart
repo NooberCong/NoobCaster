@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mockito/mockito.dart';
-import 'package:matcher/matcher.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noobcaster/core/error/exceptions.dart';
 import 'package:noobcaster/core/error/failure.dart';
@@ -323,7 +322,19 @@ void main() {
         //assert
         verifyZeroInteractions(mockRemoteWeatherDataSource);
       });
-      test("Should return sever failure", () async {
+      test("Should return WeatherDataModel if data is in cache", () async {
+        //arrange
+        when(mockLocalWeatherDataSource.getCachedLocationWeatherData(any))
+            .thenAnswer((_) async => model);
+        //act
+        final result = await repository.getLocationWeather(tLocation);
+        //assert
+        expect(result, Right(model));
+      });
+      test("Should return CacheFailure when data is not in cache", () async {
+        //arrange
+        when(mockLocalWeatherDataSource.getCachedLocationWeatherData(any))
+            .thenThrow(CacheError());
         //act
         final result = await repository.getLocationWeather(tLocation);
         //assert
@@ -332,22 +343,21 @@ void main() {
     });
   });
   group("getCachedLocationWeather", () {
-    test("Should return list of weather data models", () async {
+    test("Should call getCachedWeatherData", () async {
       //arrange
-      when(mockLocalWeatherDataSource.getCachedLocationWeatherData())
-          .thenAnswer((_) async => modelList);
+      when(mockLocalWeatherDataSource.getCachedWeatherData())
+          .thenAnswer((_) async => {"local": model, "location": modelList});
       //act
-      final result = await repository.getCachedLocationWeather();
+      await repository.getCachedWeather();
       //assert
-      verify(mockLocalWeatherDataSource.getCachedLocationWeatherData());
-      expect(result, Right(modelList));
+      verify(mockLocalWeatherDataSource.getCachedWeatherData());
     });
     test("Should return cache failure when localDataSource fails", () async {
       //arrange
-      when(mockLocalWeatherDataSource.getCachedLocationWeatherData())
+      when(mockLocalWeatherDataSource.getCachedWeatherData())
           .thenThrow(CacheError());
       //act
-      final result = await repository.getCachedLocationWeather();
+      final result = await repository.getCachedWeather();
       //assert
       expect(result, Left(CacheFailure()));
     });

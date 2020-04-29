@@ -66,18 +66,27 @@ class WeatherRepositoryImpl implements WeatherRepository {
             await remoteDataSource.getLocationWeatherData(placemarks[0]);
         localDataSource.cacheLocationWeatherData(weatherData);
         return Right(weatherData);
+      } on ServerError {
+        return Left(ServerFailure());
+      } on PlatformException {
+        return Left(InputFailure());
+      }
+    } else {
+      try {
+        final weatherData =
+            await localDataSource.getCachedLocationWeatherData(location);
+        return Right(weatherData);
       } on Exception {
         return Left(ServerFailure());
       }
     }
-    return Left(ServerFailure());
   }
 
   @override
-  Future<Either<Failure, List<WeatherData>>> getCachedLocationWeather() async {
+  Future<Either<Failure, Map<String, dynamic>>> getCachedWeather() async {
     try {
       final cachedLocationWeatherData =
-          await localDataSource.getCachedLocationWeatherData();
+          await localDataSource.getCachedWeatherData();
       return Right(cachedLocationWeatherData);
     } on Exception {
       return Left(CacheFailure());

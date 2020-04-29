@@ -7,7 +7,6 @@ abstract class WeatherDataState extends Equatable {
 class WeatherDataInitial extends WeatherDataState {
   @override
   List<Object> get props => [];
-
 }
 
 class WeatherDataLoading extends WeatherDataState {
@@ -27,4 +26,16 @@ class WeatherDataError extends WeatherDataState {
   WeatherDataError({@required this.message});
   @override
   List<Object> get props => [message];
+}
+
+class CacheWeatherDataLoaded extends WeatherDataState {
+  final Map<String, dynamic> cachedData;
+  CacheWeatherDataLoaded({@required this.cachedData});
+  @override
+  List<Object> get props => [cachedData];
+}
+
+class CacheWeatherDataError extends WeatherDataState {
+  @override
+  List<Object> get props => [];
 }

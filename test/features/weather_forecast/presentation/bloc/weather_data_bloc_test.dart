@@ -1,13 +1,19 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
+import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
+import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_local_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
+
+import '../../../../fixtures/fixture_reader.dart';
 
 class MockGetLocalWeatherData extends Mock implements GetLocalWeatherData {}
 
@@ -16,10 +22,14 @@ class MockInputValidator extends Mock implements InputValidator {}
 class MockGetLocationWeatherData extends Mock
     implements GetLocationWeatherData {}
 
+class MockGetCachedLocationWeatherData extends Mock
+    implements GetCachedLocationWeatherData {}
+
 void main() {
   WeatherDataBloc bloc;
   MockGetLocalWeatherData mockGetLocalWeatherData;
   MockGetLocationWeatherData mockGetLocationWeatherData;
+  MockGetCachedLocationWeatherData mockGetCachedLocationWeatherData;
   MockInputValidator mockInputValidator;
   final city = "Tay Ninh";
   final dateTime = DateTime(1212, 12, 12, 12, 12);
@@ -57,10 +67,13 @@ void main() {
     mockInputValidator = MockInputValidator();
     mockGetLocalWeatherData = MockGetLocalWeatherData();
     mockGetLocationWeatherData = MockGetLocationWeatherData();
+    mockGetCachedLocationWeatherData = MockGetCachedLocationWeatherData();
     bloc = WeatherDataBloc(
-        inputValidator: mockInputValidator,
-        local: mockGetLocalWeatherData,
-        location: mockGetLocationWeatherData);
+      inputValidator: mockInputValidator,
+      local: mockGetLocalWeatherData,
+      location: mockGetLocationWeatherData,
+      cached: mockGetCachedLocationWeatherData,
+    );
   });
   test('Initial state should be WeatherDataInitial', () {
     //assert
@@ -136,7 +149,7 @@ void main() {
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
-      bloc.add(RefreshWeatherDataEvent(WeatherDataLoaded(data: localData)));
+      bloc.add(RefreshWeatherDataEvent(localData));
     });
   });
   group("GetLocationWeatherData", () {
@@ -228,7 +241,91 @@ void main() {
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
-      bloc.add(RefreshWeatherDataEvent(WeatherDataLoaded(data: locationData)));
+      bloc.add(RefreshWeatherDataEvent(locationData));
+    });
+  });
+  group("GetCachedWeatherDataEvent", () {
+    final cachedData =
+        (json.decode(fixture("cached_location_weather.json")) as List<dynamic>)
+            .map((entry) => WeatherDataModel.fromCacheJson(entry))
+            .toList();
+    test(
+        "Should emit [WeatherDataInitial, CacheWeatherDataLoaded] if there is cached data",
+        () {
+      //arrange
+      when(mockGetCachedLocationWeatherData.call(any)).thenAnswer(
+          (_) async => Right({"local": cachedData[0], "location": cachedData}));
+      //assert later
+      final expectedStates = [
+        WeatherDataInitial(),
+        CacheWeatherDataLoaded(
+            cachedData: {"local": cachedData[0], "location": cachedData})
+      ];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(GetCachedWeatherDataEvent());
+    });
+    test(
+        "Should emit [WeatherDataInitial, CacheWeatherDataLoaded] with empty list when there is no cached data",
+        () {
+      when(mockGetCachedLocationWeatherData.call(any))
+          .thenAnswer((_) async => Left(CacheFailure()));
+      //assert later
+      final expectedStates = [WeatherDataInitial(), CacheWeatherDataError()];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(GetCachedWeatherDataEvent());
+    });
+  });
+  group("getDrawerWeatherData", () {
+    final remoteData = WeatherData(
+        currentTemp: 12.12,
+        daily: [],
+        humidity: 13,
+        icon: "04d",
+        isCached: false,
+        isLocal: true,
+        sunrise: DateTime.now(),
+        sunset: DateTime.now(),
+        uvi: 12,
+        windspeed: 12,
+        dateTime: DateTime.now(),
+        description: "Hot",
+        displayName: "Tay Ninh",
+        hourly: []);
+    final cachedData = WeatherDataModel.fromCacheJson(
+        json.decode(fixture("cached_local_weather.json")));
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataLoaded] with remote weatherdata if call is successful",
+        () {
+      //arrange
+      when(mockGetLocalWeatherData(any))
+          .thenAnswer((_) async => Right(remoteData));
+      //assert later
+      final expectedStates = [
+        WeatherDataInitial(),
+        WeatherDataLoading(),
+        WeatherDataLoaded(data: remoteData)
+      ];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(GetDrawerWeatherDataEvent(backup: cachedData));
+    });
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading, WeatherDataLoaded] with backup weatherdata if call is unsuccessful",
+        () {
+      //arrange
+      when(mockGetLocalWeatherData(any))
+          .thenAnswer((_) async => Left(ServerFailure()));
+      //assert later
+      final expectedStates = [
+        WeatherDataInitial(),
+        WeatherDataLoading(),
+        WeatherDataLoaded(data: cachedData)
+      ];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(GetDrawerWeatherDataEvent(backup: cachedData));
     });
   });
 }

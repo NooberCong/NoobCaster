@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
+import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_local_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
@@ -12,27 +13,31 @@ part 'weather_data_event.dart';
 part 'weather_data_state.dart';
 
 const String SERVER_FAILURE_MESSAGE =
-    "Server error: Please check your internet connection";
-const String CACHE_FAILURE_MESSAGE = "Cache error: No previous data found";
+    "Server error: Something went wrong while contacting server";
+const String CACHE_FAILURE_MESSAGE = "Cache error: No cached data found for offline mode";
 const String PERMISSION_FAILURE_MESSAGE =
     "Permission error: NooberCaster was not permitted to locate device location";
-const String INPUT_FAILURE_MESSAGE = "Invalid city name, please try again";
+const String INPUT_FAILURE_MESSAGE = "Input error: no location matched the input, please try again";
 
 class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
   final GetLocalWeatherData getLocalWeatherData;
   final GetLocationWeatherData getLocationWeatherData;
+  final GetCachedLocationWeatherData getCachedLocationWeatherData;
   final InputValidator validator;
 
   WeatherDataBloc(
       {@required InputValidator inputValidator,
+      @required GetCachedLocationWeatherData cached,
       @required GetLocalWeatherData local,
       @required GetLocationWeatherData location})
       : assert(inputValidator != null),
         assert(local != null),
         assert(location != null),
+        assert(cached != null),
         validator = inputValidator,
         getLocalWeatherData = local,
-        getLocationWeatherData = location;
+        getLocationWeatherData = location,
+        getCachedLocationWeatherData = cached;
   @override
   WeatherDataState get initialState => WeatherDataInitial();
 
@@ -42,24 +47,26 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
   ) async* {
     if (event is GetLocationWeatherEvent) {
       yield WeatherDataLoading();
-      yield* getLocationWeatherResult(event.location);
+      yield* _getLocationWeatherResult(event.location);
     } else if (event is GetLocalWeatherEvent) {
       yield WeatherDataLoading();
-      yield* getLocalWeatherResult();
+      yield* _getLocalWeatherResult();
     } else if (event is RefreshWeatherDataEvent) {
-      final state = event.currentState;
-      if (state is WeatherDataLoaded) {
-        yield WeatherDataLoading();
-        if (state.data.isLocal) {
-          yield* getLocalWeatherResult();
-        } else {
-          yield* getLocationWeatherResult(state.data.displayName);
-        }
+      yield WeatherDataLoading();
+      if (event.data.isLocal) {
+        yield* _getLocalWeatherResult();
+      } else {
+        yield* _getLocationWeatherResult(event.data.displayName);
       }
+    } else if (event is GetCachedWeatherDataEvent) {
+      yield* _getCachedWeatherDataResults();
+    } else if (event is GetDrawerWeatherDataEvent) {
+      yield WeatherDataLoading();
+      yield* _getDrawerWeatherDataResults(event.backup);
     }
   }
 
-  Stream<WeatherDataState> getLocationWeatherResult(String location) async* {
+  Stream<WeatherDataState> _getLocationWeatherResult(String location) async* {
     final isValid = validator.validate(location);
     if (!isValid) {
       yield WeatherDataError(message: INPUT_FAILURE_MESSAGE);
@@ -72,7 +79,7 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
     }
   }
 
-  Stream<WeatherDataState> getLocalWeatherResult() async* {
+  Stream<WeatherDataState> _getLocalWeatherResult() async* {
     final failureOrData = await getLocalWeatherData(NoParams());
     yield failureOrData.fold(
         (failure) => WeatherDataError(message: _mapFailureToMessage(failure)),
@@ -87,5 +94,25 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
             : failure is PermissionFailure
                 ? PERMISSION_FAILURE_MESSAGE
                 : INPUT_FAILURE_MESSAGE;
+  }
+
+  Stream<WeatherDataState> _getCachedWeatherDataResults() async* {
+    final cachedData = await getCachedLocationWeatherData(NoParams());
+    yield cachedData.fold((failure) => CacheWeatherDataError(),
+        (data) => CacheWeatherDataLoaded(cachedData: data));
+  }
+
+  Stream<WeatherDataState> _getDrawerWeatherDataResults(
+      WeatherData backup) async* {
+    if (backup.isLocal) {
+      final failureOrData = await getLocalWeatherData(NoParams());
+      yield failureOrData.fold((failure) => WeatherDataLoaded(data: backup),
+          (data) => WeatherDataLoaded(data: data));
+    } else {
+      final failureOrData =
+          await getLocationWeatherData(Params(location: backup.displayName));
+      yield failureOrData.fold((failure) => WeatherDataLoaded(data: backup),
+          (data) => WeatherDataLoaded(data: data));
+    }
   }
 }

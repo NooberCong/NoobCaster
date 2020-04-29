@@ -5,10 +5,12 @@ import 'package:get_it/get_it.dart';
 import 'package:noobcaster/core/network/network_info.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
 import 'package:noobcaster/core/util/time_zone_handler.dart';
+import 'package:noobcaster/core/voice%20recognition/voice_recognition.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/local_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/remote_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/repositories/weather_repository_impl.dart';
 import 'package:noobcaster/features/weather_forecast/domain/repositories/weather_repository.dart';
+import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_local_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
@@ -18,11 +20,13 @@ final sl = GetIt.I;
 
 Future<void> init() async {
   //Features - WeatherData
-  sl.registerFactory(
-      () => WeatherDataBloc(inputValidator: sl(), local: sl(), location: sl()));
+  sl.registerFactory(() => WeatherDataBloc(
+      inputValidator: sl(), local: sl(), location: sl(), cached: sl()));
   //Use cases
   sl.registerLazySingleton(() => GetLocalWeatherData(repository: sl()));
   sl.registerLazySingleton(() => GetLocationWeatherData(repository: sl()));
+  sl.registerLazySingleton(
+      () => GetCachedLocationWeatherData(repository: sl()));
   //Core
   sl.registerLazySingleton<InputValidator>(() => InputValidatorImpl());
   //Repository
@@ -37,6 +41,8 @@ Future<void> init() async {
   sl.registerLazySingleton<RemoteWeatherDataSource>(
       () => RemoteWeatherDataSourceImpl(client: sl(), timezoneHandler: sl()));
   //External
+  final voiceRecognition = VoiceRecognitionImpl();
+  await voiceRecognition.init();
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<TimezoneHandler>(() => TimezoneHandlerImpl());
   sl.registerLazySingleton(() => sharedPreferences);
@@ -44,4 +50,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => Geolocator());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => DataConnectionChecker());
+  sl.registerLazySingleton<VoiceRecognition>(() => voiceRecognition);
 }

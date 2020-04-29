@@ -5,5 +5,5 @@ import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dar
 abstract class WeatherRepository {
   Future<Either<Failure, WeatherData>> getLocalWeather();
   Future<Either<Failure, WeatherData>> getLocationWeather(String location);
-  Future<Either<Failure, List<WeatherData>>> getCachedLocationWeather();
+  Future<Either<Failure, Map<String, dynamic>>> getCachedWeather();
 }

@@ -6,9 +6,16 @@ class ErrorDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      message,
-      style: TextStyle(color: Colors.white, fontSize: 18),
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 40,
+        ),
+        child: Text(
+          message,
+          style: TextStyle(color: Colors.grey.shade500, fontSize: 16),
+        ),
+      ),
     );
   }
 }

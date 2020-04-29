@@ -71,8 +71,8 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
             color: Colors.grey[300].withOpacity(0.2),
             borderRadius: BorderRadius.circular(20),
           ),
-          height: MediaQuery.of(context).size.height / 3.5,
-          width: MediaQuery.of(context).size.width,
+          height: 250,
+          width: double.infinity,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -219,7 +219,7 @@ class TempVisualizer extends StatelessWidget {
         ),
         Container(
           width: 5,
-          height: temp / max * (MediaQuery.of(context).size.height / 14),
+          height: math.max(60 - 5 * (max - temp), 10),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(10),
@@ -272,37 +272,37 @@ class TempRangeVisualizer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(toCelcius(maxTemp),
-            style: TextStyle(color: Colors.white, fontSize: 18)),
-        SizedBox(
-          height: 5,
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height / 3.5 - 200,
-          child: Center(
+    return Container(
+      height: 125,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(toCelcius(maxTemp),
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+          SizedBox(
+            height: 5,
+          ),
+          Center(
             child: Container(
               width: 5,
-              height: math.max((maxTemp - minTemp) / max, 0.5) *
-                  (MediaQuery.of(context).size.height / 15),
+              height: math.max(50 - 6 * (max - (maxTemp - minTemp)), 10),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Text(toCelcius(minTemp),
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            )),
-      ],
+          SizedBox(
+            height: 5,
+          ),
+          Text(toCelcius(minTemp),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              )),
+        ],
+      ),
     );
   }
 }

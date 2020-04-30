@@ -3,14 +3,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:noobcaster/core/network/network_info.dart';
+import 'package:noobcaster/core/settings/app_settings.dart';
+import 'package:noobcaster/core/speech%20recognition/speech_recognition.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
 import 'package:noobcaster/core/util/time_zone_handler.dart';
-import 'package:noobcaster/core/voice%20recognition/voice_recognition.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/local_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/remote_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/repositories/weather_repository_impl.dart';
 import 'package:noobcaster/features/weather_forecast/domain/repositories/weather_repository.dart';
-import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_location_weather_data.dart';
+import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_local_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
@@ -25,8 +26,7 @@ Future<void> init() async {
   //Use cases
   sl.registerLazySingleton(() => GetLocalWeatherData(repository: sl()));
   sl.registerLazySingleton(() => GetLocationWeatherData(repository: sl()));
-  sl.registerLazySingleton(
-      () => GetCachedLocationWeatherData(repository: sl()));
+  sl.registerLazySingleton(() => GetCachedWeatherData(repository: sl()));
   //Core
   sl.registerLazySingleton<InputValidator>(() => InputValidatorImpl());
   //Repository
@@ -34,6 +34,7 @@ Future<void> init() async {
       remoteDataSource: sl(),
       localDataSource: sl(),
       geolocator: sl(),
+      appSettings: sl(),
       networkInfo: sl()));
   //Data sources
   sl.registerLazySingleton<LocalWeatherDataSource>(
@@ -51,4 +52,6 @@ Future<void> init() async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => DataConnectionChecker());
   sl.registerLazySingleton<VoiceRecognition>(() => voiceRecognition);
+  sl.registerLazySingleton<AppSettings>(
+      () => AppSettingsImpl(preferences: sharedPreferences));
 }

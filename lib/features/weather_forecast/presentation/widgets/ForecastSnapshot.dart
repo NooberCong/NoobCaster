@@ -203,29 +203,32 @@ class TempVisualizer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          toCelcius(temp),
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
+    return SizedBox(
+      height: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            tempFromUnit(temp),
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
           ),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Container(
-          width: 5,
-          height: math.max(60 - 5 * (max - temp), 10),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(10),
+          SizedBox(
+            height: 5,
           ),
-        ),
-      ],
+          Container(
+            width: 5,
+            height: math.max(60 - 5 * (max - temp), 10),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -278,7 +281,7 @@ class TempRangeVisualizer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(toCelcius(maxTemp),
+          Text(tempFromUnit(maxTemp),
               style: TextStyle(color: Colors.white, fontSize: 18)),
           SizedBox(
             height: 5,
@@ -296,7 +299,7 @@ class TempRangeVisualizer extends StatelessWidget {
           SizedBox(
             height: 5,
           ),
-          Text(toCelcius(minTemp),
+          Text(tempFromUnit(minTemp),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,

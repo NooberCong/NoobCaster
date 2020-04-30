@@ -5,19 +5,22 @@ import 'package:noobcaster/core/error/exceptions.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:meta/meta.dart';
 import 'package:noobcaster/core/network/network_info.dart';
+import 'package:noobcaster/core/settings/app_settings.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/local_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/remote_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
 import 'package:noobcaster/features/weather_forecast/domain/repositories/weather_repository.dart';
 
 class WeatherRepositoryImpl implements WeatherRepository {
+  final AppSettings appSettings;
   final RemoteWeatherDataSource remoteDataSource;
   final LocalWeatherDataSource localDataSource;
   final NetworkInfo networkInfo;
   final Geolocator geolocator;
 
   WeatherRepositoryImpl(
-      {@required this.remoteDataSource,
+      {@required this.appSettings,
+      @required this.remoteDataSource,
       @required this.localDataSource,
       @required this.geolocator,
       @required this.networkInfo});
@@ -31,7 +34,10 @@ class WeatherRepositoryImpl implements WeatherRepository {
     if (isOnline) {
       try {
         final currentPos = await geolocator.getCurrentPosition();
-        final placemark = await geolocator.placemarkFromPosition(currentPos);
+        final placemark = await geolocator.placemarkFromPosition(
+          currentPos,
+          localeIdentifier: appSettings.getLocale(),
+        );
         final weatherData =
             await remoteDataSource.getLocalWeatherData(placemark[0]);
         localDataSource.cacheLocalWeatherData(weatherData);
@@ -58,7 +64,10 @@ class WeatherRepositoryImpl implements WeatherRepository {
     final isOnline = await networkInfo.isOnline;
     if (isOnline) {
       try {
-        final placemarks = await geolocator.placemarkFromAddress(location);
+        final placemarks = await geolocator.placemarkFromAddress(
+          location,
+          localeIdentifier: appSettings.getLocale(),
+        );
         if (_isEmpty(placemarks)) {
           return Left(InputFailure());
         }

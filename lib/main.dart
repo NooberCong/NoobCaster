@@ -62,9 +62,6 @@ class HomeScreen extends StatelessWidget {
           right: 0,
           left: 0,
           child: BlocBuilder<WeatherDataBloc, WeatherDataState>(
-            condition: (previousState, state) =>
-                !(state is CacheWeatherDataLoaded) &&
-                !(state is CacheWeatherDataError),
             builder: (context, state) {
               if (state is WeatherDataInitial) {
                 BlocProvider.of<WeatherDataBloc>(context)

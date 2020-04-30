@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:noobcaster/core/city_list.dart';
-import 'package:noobcaster/core/voice%20recognition/voice_recognition.dart';
+import 'package:noobcaster/core/speech%20recognition/speech_recognition.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
 import 'package:noobcaster/injection_container.dart';
 

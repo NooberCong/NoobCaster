@@ -1,26 +1,21 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:noobcaster/core/error/failure.dart';
+import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/temp_converter.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
+import 'package:noobcaster/features/weather_forecast/domain/repositories/weather_repository.dart';
+import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
+import 'package:noobcaster/injection_container.dart';
 
-class CustomDrawer extends StatefulWidget {
+class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
     Key key,
   }) : super(key: key);
-
-  @override
-  _CustomDrawerState createState() => _CustomDrawerState();
-}
-
-class _CustomDrawerState extends State<CustomDrawer> {
-  @override
-  void initState() {
-    BlocProvider.of<WeatherDataBloc>(context).add(GetCachedWeatherDataEvent());
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,70 +47,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   SizedBox(
                     height: 20,
                   ),
-                  BlocBuilder(
-                    condition: (previous, state) =>
-                        state is CacheWeatherDataLoaded ||
-                        state is CacheWeatherDataError,
-                    bloc: BlocProvider.of<WeatherDataBloc>(context),
-                    builder: (context, state) {
-                      if (state is CacheWeatherDataLoaded) {
-                        return Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "My location",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              CachedWeatherCard(
-                                data: state.cachedData["local"],
-                              ),
-                              Divider(
-                                color: Colors.grey[300],
-                                indent: 20,
-                                endIndent: 20,
-                                thickness: 0.2,
-                              ),
-                              Text(
-                                "Last Searched Locations",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Expanded(
-                                child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  itemCount:
-                                      state.cachedData["location"].length,
-                                  itemBuilder: (context, index) =>
-                                      CachedWeatherCard(
-                                    data: state.cachedData["location"][
-                                        state.cachedData["location"].length -
-                                            index -
-                                            1],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Text(
-                          "No cached data found",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        );
-                      }
-                    },
-                  )
+                  FutureBuilder(
+                      future: GetCachedWeatherData(
+                          repository: sl<WeatherRepository>())(NoParams()),
+                      builder: _buildFuture)
                 ],
               ),
             ),
@@ -123,6 +58,64 @@ class _CustomDrawerState extends State<CustomDrawer> {
         ),
       ),
     );
+  }
+
+  Widget _buildFuture(BuildContext context,
+      AsyncSnapshot<Either<Failure, Map<String, dynamic>>> snapshot) {
+    if (snapshot.hasData) {
+      return snapshot.data.fold(
+        (failure) => Text(
+          "No cached data found",
+          style: TextStyle(color: Colors.white, fontSize: 16),
+        ),
+        (cachedData) => Expanded(
+          child: Column(
+            children: <Widget>[
+              Text(
+                "My location",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              CachedWeatherCard(
+                data: cachedData["local"],
+              ),
+              Divider(
+                color: Colors.grey[300],
+                indent: 20,
+                endIndent: 20,
+                thickness: 0.2,
+              ),
+              Text(
+                "Last Searched Locations",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: cachedData["location"].length,
+                  itemBuilder: (context, index) => CachedWeatherCard(
+                    data: cachedData["location"]
+                        [cachedData["location"].length - index - 1],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return SizedBox();
   }
 }
 
@@ -172,7 +165,7 @@ class CachedWeatherCard extends StatelessWidget {
                     height: 30,
                   ),
                   Text(
-                    toCelcius(data.currentTemp),
+                    tempFromUnit(data.currentTemp),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -188,8 +181,12 @@ class CachedWeatherCard extends StatelessWidget {
   }
 
   void _getDrawerWeatherData(BuildContext context, WeatherData cachedData) {
-    BlocProvider.of<WeatherDataBloc>(context)
-        .add(GetDrawerWeatherDataEvent(backup: cachedData));
+    if (cachedData.isLocal) {
+      BlocProvider.of<WeatherDataBloc>(context).add(GetLocalWeatherEvent());
+    } else {
+      BlocProvider.of<WeatherDataBloc>(context)
+          .add(GetLocationWeatherEvent(cachedData.displayName));
+    }
     Navigator.of(context).pop(context);
   }
 }

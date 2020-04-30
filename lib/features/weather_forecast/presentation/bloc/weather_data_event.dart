@@ -29,9 +29,9 @@ class GetCachedWeatherDataEvent extends WeatherDataEvent {
   List<Object> get props => [];
 }
 
-class GetDrawerWeatherDataEvent extends WeatherDataEvent {
-  final WeatherData backup;
-  GetDrawerWeatherDataEvent({@required this.backup});
+class ReloadStateEvent extends WeatherDataEvent {
+  final WeatherDataState currentState;
+  ReloadStateEvent({@required this.currentState});
   @override
-  List<Object> get props => [backup];
+  List<Object> get props => [currentState];
 }

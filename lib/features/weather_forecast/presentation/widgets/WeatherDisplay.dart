@@ -38,21 +38,21 @@ class _WeatherDisplayState extends State<WeatherDisplay>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(() =>
-          BlocProvider.of<WeatherDataBloc>(context)
-              .add(RefreshWeatherDataEvent(widget.data))),
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: FadeTransition(
-          opacity: _opacityAnimation,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20),
-              ),
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(20),
+        topLeft: Radius.circular(20),
+      ),
+      child: RefreshIndicator(
+        onRefresh: () => Future.sync(() =>
+            BlocProvider.of<WeatherDataBloc>(context)
+                .add(RefreshWeatherDataEvent(widget.data))),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: FadeTransition(
+            opacity: _opacityAnimation,
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Column(
                 children: <Widget>[
                   SizedBox(
@@ -91,7 +91,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      text: "${toCelcius(widget.data.currentTemp)}\n",
+                      text: "${tempFromUnit(widget.data.currentTemp)}\n",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 70,

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:noobcaster/core/settings/app_settings.dart';
+import 'package:noobcaster/injection_container.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -24,11 +26,12 @@ class VoiceRecognitionImpl implements VoiceRecognition {
   }
 
   @override
-  void startListening() {
+  void startListening() async {
     String result;
+    String settingsLocaleId = sl<AppSettings>().getLocale();
     if (_available) {
       _speech.listen(
-          listenFor: Duration(days: 1),
+          listenFor: Duration(minutes: 1),
           onResult: (results) {
             final alternates = results.alternates;
             result = alternates
@@ -36,22 +39,26 @@ class VoiceRecognitionImpl implements VoiceRecognition {
                 .recognizedWords;
             _controller.add(result);
           },
-          localeId: "en_US");
+          localeId: settingsLocaleId);
     } else {
       throw UnimplementedError();
     }
   }
 
-  void _onError(SpeechRecognitionError errorNotification) {
-    print(errorNotification.errorMsg);
+  void _onError(SpeechRecognitionError _) {
+    _timeOutEndSpeech();
   }
 
   void _onStatus(String status) {
     if (status == "notListening") {
-      Future.delayed(Duration(seconds: 1), () {
-        _speech.stop();
-        _controller.close();
-      });
+      _timeOutEndSpeech();
     }
+  }
+
+  void _timeOutEndSpeech() {
+    Future.delayed(Duration(seconds: 1), () {
+      _speech.stop();
+      _controller.close();
+    });
   }
 }

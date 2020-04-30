@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:noobcaster/core/error/exceptions.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:noobcaster/core/network/network_info.dart';
+import 'package:noobcaster/core/settings/app_settings.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/local_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/data%20sources/remote_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
@@ -13,6 +14,8 @@ import 'package:noobcaster/features/weather_forecast/data/repositories/weather_r
 
 class MockRemoteWeatherDataSource extends Mock
     implements RemoteWeatherDataSource {}
+
+class MockAppSettings extends Mock implements AppSettings {}
 
 class MockLocalWeatherDataSource extends Mock
     implements LocalWeatherDataSource {}
@@ -27,6 +30,7 @@ void main() {
   MockNetworkInfo mockNetworkInfo;
   WeatherRepositoryImpl repository;
   MockGeolocator mockGeolocator;
+  MockAppSettings mockAppSettings;
   final position = Position(latitude: 11.3, longitude: 4.3);
   final placemarks = [Placemark(name: "Tay Ninh", position: position)];
   final dateTime = DateTime(1212, 12, 12, 12, 12);
@@ -51,16 +55,20 @@ void main() {
     mockLocalWeatherDataSource = MockLocalWeatherDataSource();
     mockNetworkInfo = MockNetworkInfo();
     mockGeolocator = MockGeolocator();
+    mockAppSettings = MockAppSettings();
     repository = WeatherRepositoryImpl(
         remoteDataSource: mockRemoteWeatherDataSource,
         localDataSource: mockLocalWeatherDataSource,
         geolocator: mockGeolocator,
-        networkInfo: mockNetworkInfo);
+        networkInfo: mockNetworkInfo,
+        appSettings: mockAppSettings);
   });
   group("getLocalWeatherData", () {
     setUp(() {
-      when(mockGeolocator.placemarkFromPosition(any))
+      when(mockGeolocator.placemarkFromPosition(any,
+              localeIdentifier: anyNamed("localeIdentifier")))
           .thenAnswer((_) async => placemarks);
+      when(mockAppSettings.getLocale()).thenReturn("en_US");
     });
     test("should check if device is online", () async {
       //arrange
@@ -108,7 +116,7 @@ void main() {
       //assert
       verify(mockGeolocator.getCurrentPosition());
     });
-    test("Should use location to get placemark", () async {
+    test("Should use location and identifier to get placemark", () async {
       //arrange
       when(mockGeolocator.getCurrentPosition())
           .thenAnswer((_) async => position);
@@ -118,7 +126,8 @@ void main() {
       //act
       await repository.getLocalWeather();
       //assert
-      verify(mockGeolocator.placemarkFromPosition(position));
+      verify(mockGeolocator.placemarkFromPosition(position,
+          localeIdentifier: "en_US"));
     });
     group("Device has gps on and is online", () {
       setUp(() {
@@ -216,9 +225,13 @@ void main() {
   });
 
   group("getLocationWeatherData", () {
+    final placemark =
+        Placemark(position: Position(latitude: 12, longitude: 12));
     setUp(() {
-      when(mockGeolocator.placemarkFromAddress(any))
-          .thenAnswer((_) async => [null]);
+      when(mockGeolocator.placemarkFromAddress(any,
+              localeIdentifier: anyNamed("localeIdentifier")))
+          .thenAnswer((_) async => [placemark]);
+      when(mockAppSettings.getLocale()).thenReturn("en_US");
     });
     final String tLocation = "Tay Ninh";
     final WeatherDataModel model = WeatherDataModel(
@@ -256,11 +269,13 @@ void main() {
         //act
         await repository.getLocationWeather(tLocation);
         //assert
-        verify(mockGeolocator.placemarkFromAddress(tLocation));
+        verify(mockGeolocator.placemarkFromAddress(tLocation,
+            localeIdentifier: "en_US"));
       });
       test("Should return InputFailure when no placemark matched", () async {
         //arrange
-        when(mockGeolocator.placemarkFromAddress(any))
+        when(mockGeolocator.placemarkFromAddress(any,
+                localeIdentifier: anyNamed("localeIdentifier")))
             .thenAnswer((_) async => []);
         //act
         final result = await repository.getLocationWeather(tLocation);
@@ -271,8 +286,7 @@ void main() {
         //act
         await repository.getLocationWeather(tLocation);
         //assert
-        verify(
-            mockRemoteWeatherDataSource.getLocationWeatherData(placemarks[0]));
+        verify(mockRemoteWeatherDataSource.getLocationWeatherData(placemark));
       });
       test("Should successfully return weather model when device is online",
           () async {
@@ -282,8 +296,7 @@ void main() {
         //act
         final result = await repository.getLocationWeather(tLocation);
         //assert
-        verify(
-            mockRemoteWeatherDataSource.getLocationWeatherData(placemarks[0]));
+        verify(mockRemoteWeatherDataSource.getLocationWeatherData(placemark));
         expect(result, Right(model));
       });
       test("Should cache location weather data when call to api is successful",
@@ -304,8 +317,7 @@ void main() {
         //act
         final result = await repository.getLocationWeather(tLocation);
         //assert
-        verify(
-            mockRemoteWeatherDataSource.getLocationWeatherData(placemarks[0]));
+        verify(mockRemoteWeatherDataSource.getLocationWeatherData(placemark));
         verifyZeroInteractions(mockLocalWeatherDataSource);
         expect(result, Left(ServerFailure()));
       });

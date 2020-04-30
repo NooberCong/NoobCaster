@@ -41,7 +41,7 @@ class WeatherDataModel extends WeatherData {
         isLocal: isLocal,
         isCached: false,
         currentTemp: json["current"]["temp"],
-        uvi: json["current"]["uvi"],
+        uvi: (json["current"]["uvi"] as num).toDouble(),
         windspeed: (json["current"]["wind_speed"] as num).toDouble(),
         dateTime: handler.dateTimeFromUnixAndTimezone(
             json["timezone"], json["current"]["dt"]),

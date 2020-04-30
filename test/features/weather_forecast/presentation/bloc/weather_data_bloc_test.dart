@@ -276,4 +276,30 @@ void main() {
       bloc.add(GetCachedWeatherDataEvent());
     });
   });
+  group("ReloadState", () {
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoading] in case of ReloadStateEvent WeatherDataLoading]",
+        () {
+      //assert later
+      final expectedStates = [WeatherDataInitial(), WeatherDataLoading()];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(ReloadStateEvent(currentState: WeatherDataLoading()));
+    });
+    test(
+        "Should emit [WeatherDataInitial, WeatherDataLoaded] when current state is WeatherDataLoaded]",
+        () {
+      //arrange
+      final model = WeatherDataModel.fromCacheJson(
+          json.decode(fixture("cached_local_weather.json")));
+      //assert later
+      final expectedStates = [
+        WeatherDataInitial(),
+        WeatherDataLoaded(data: model)
+      ];
+      expectLater(bloc, emitsInOrder(expectedStates));
+      //act
+      bloc.add(ReloadStateEvent(currentState: WeatherDataLoaded(data: model)));
+    });
+  });
 }

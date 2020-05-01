@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/util/time_converter.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
 
@@ -15,7 +16,7 @@ class DetailsSnapshot extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: 40, bottom: 20),
           child: Text(
-            "Details",
+            translateDetails(),
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
@@ -34,12 +35,12 @@ class DetailsSnapshot extends StatelessWidget {
               ),
               DetailBar(
                 data: formattedHourAndMinute(data.sunrise),
-                label: "Sunrise",
+                label: translateSunrise(),
                 icon: "sunrise-details",
               ),
               DetailBar(
                 data: formattedHourAndMinute(data.sunset),
-                label: "Sunset",
+                label: translateSunset(),
                 icon: "sunset-details",
               ),
             ],

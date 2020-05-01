@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/settings/app_settings.dart';
+import 'package:noobcaster/core/usecases/usecase.dart';
+import 'package:noobcaster/features/weather_forecast/domain/repositories/weather_repository.dart';
+import 'package:noobcaster/features/weather_forecast/domain/usecases/clear_cached_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
 import 'package:noobcaster/injection_container.dart';
 
@@ -19,7 +23,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-          "Settings",
+          translateSettings(),
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -38,7 +42,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
             physics: BouncingScrollPhysics(),
             children: <Widget>[
               SettingCard(
-                title: "Temperature unit",
+                title: translateTempUnit(),
                 action: DropdownButton(
                   underline: SizedBox(),
                   items: [
@@ -71,17 +75,20 @@ class _SettingsRouteState extends State<SettingsRoute> {
                 endIndent: 20,
               ),
               SettingCard(
-                title: "Locality",
+                expand: true,
+                title: translateLocale(),
                 action: DropdownButton(
                   underline: SizedBox(),
                   items: _generateLocaleMenuItems(),
                   onChanged: (value) {
                     _setLocale(value);
+                    _discardCachedLocationWeatherData();
                     _reloadBlocState(context);
                     _rerender();
                   },
                   value: _getLocaleConfig(),
                 ),
+                subtitle: translateLocaleWarning(),
               )
             ],
           ),
@@ -116,35 +123,49 @@ class _SettingsRouteState extends State<SettingsRoute> {
   }
 
   List<DropdownMenuItem> _generateLocaleMenuItems() {
-    return Locales.map(
-      (locale) => DropdownMenuItem(
-        value: locale,
-        child: Text(
-          locale,
-          style: TextStyle(color: Colors.blue),
-        ),
-      ),
-    ).toList();
+    return Locales.keys
+        .map(
+          (locale) => DropdownMenuItem(
+            value: Locales[locale],
+            child: Text(
+              locale,
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  void _discardCachedLocationWeatherData() {
+    ClearCachedLocationWeatherData(repository: sl<WeatherRepository>())(
+        NoParams());
   }
 }
 
 class SettingCard extends StatelessWidget {
+  final bool expand;
+  final String subtitle;
   final String title;
   final Widget action;
   const SettingCard({
     Key key,
     @required this.title,
     @required this.action,
+    this.subtitle,
+    this.expand,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      dense: true,
+      isThreeLine: expand != null,
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       title: Text(
         title,
         style: TextStyle(color: Colors.white, fontSize: 18),
       ),
+      subtitle: _subtitle(),
       trailing: Theme(
         data: Theme.of(context).copyWith(
           canvasColor: Colors.grey.shade900,
@@ -152,5 +173,16 @@ class SettingCard extends StatelessWidget {
         child: action,
       ),
     );
+  }
+
+  Widget _subtitle() {
+    return subtitle != null
+        ? Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          )
+        : null;
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/temp_converter.dart';
@@ -65,14 +66,14 @@ class CustomDrawer extends StatelessWidget {
     if (snapshot.hasData) {
       return snapshot.data.fold(
         (failure) => Text(
-          "No cached data found",
+          translateNoData(),
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
         (cachedData) => Expanded(
           child: Column(
             children: <Widget>[
               Text(
-                "My location",
+                translateMyLocation(),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -91,7 +92,8 @@ class CustomDrawer extends StatelessWidget {
                 thickness: 0.2,
               ),
               Text(
-                "Last Searched Locations",
+                translateLastSearchedLocations(),
+                maxLines: 2,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

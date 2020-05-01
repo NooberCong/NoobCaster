@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
@@ -112,7 +113,7 @@ void main() {
       final expectedStates = [
         WeatherDataInitial(),
         WeatherDataLoading(),
-        WeatherDataError(message: SERVER_FAILURE_MESSAGE)
+        WeatherDataError(message: translateServerErrorMessage())
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
@@ -128,7 +129,7 @@ void main() {
       final expectedStates = [
         WeatherDataInitial(),
         WeatherDataLoading(),
-        WeatherDataError(message: CACHE_FAILURE_MESSAGE)
+        WeatherDataError(message: translateCacheErrorMessage())
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
@@ -159,7 +160,7 @@ void main() {
       final expectedStates = [
         WeatherDataInitial(),
         WeatherDataLoading(),
-        WeatherDataError(message: INPUT_FAILURE_MESSAGE)
+        WeatherDataError(message: translateInputErrorMessage())
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
@@ -202,7 +203,7 @@ void main() {
       final expectedStates = [
         WeatherDataInitial(),
         WeatherDataLoading(),
-        WeatherDataError(message: SERVER_FAILURE_MESSAGE)
+        WeatherDataError(message: translateServerErrorMessage())
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act
@@ -219,7 +220,7 @@ void main() {
       final expectedStates = [
         WeatherDataInitial(),
         WeatherDataLoading(),
-        WeatherDataError(message: CACHE_FAILURE_MESSAGE)
+        WeatherDataError(message: translateCacheErrorMessage())
       ];
       expectLater(bloc, emitsInOrder(expectedStates));
       //act

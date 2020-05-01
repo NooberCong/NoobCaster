@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/util/temp_converter.dart';
 import 'package:noobcaster/core/util/time_converter.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
@@ -162,9 +163,9 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
 
 String _getSnapshotDescription<T>(int length) {
   if (T == HourlyWeatherData) {
-    return "Hourly ($length hours)";
+    return translateHour();
   } else {
-    return "Daily ($length days)";
+    return translateDay();
   }
 }
 
@@ -247,7 +248,7 @@ class DailyForecastColumn extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(dayOfWeek(data.weekday),
+          Text(translateWeekDay(data.weekday),
               style: TextStyle(color: Colors.white, fontSize: 16)),
           SvgPicture.asset("assets/images/${data.icon}.svg",
               width: 50, height: 50),

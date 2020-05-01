@@ -10,6 +10,7 @@ abstract class LocalWeatherDataSource {
   Future<Map<String, dynamic>> getCachedWeatherData();
   Future<void> cacheLocalWeatherData(WeatherDataModel model);
   Future<void> cacheLocationWeatherData(WeatherDataModel model);
+  void clearLocationWeatherDataCache();
 }
 
 const CACHED_LOCAL_WEATHER_DATA = "CACHED_LOCAL_WEATHER_DATA";
@@ -112,5 +113,10 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
     return locationWeatherData
         .where((cachedModel) => cachedModel.displayName != model.displayName)
         .toList();
+  }
+
+  @override
+  void clearLocationWeatherDataCache() {
+    sharedPreferences.setString(CACHED_LOCATION_WEATHER_DATA, json.encode([]));
   }
 }

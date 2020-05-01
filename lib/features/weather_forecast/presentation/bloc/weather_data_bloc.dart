@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
@@ -11,15 +12,6 @@ import 'package:noobcaster/features/weather_forecast/domain/usecases/get_locatio
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
 part 'weather_data_event.dart';
 part 'weather_data_state.dart';
-
-const String SERVER_FAILURE_MESSAGE =
-    "Server error: Something went wrong while contacting server";
-const String CACHE_FAILURE_MESSAGE =
-    "Cache error: No cached data found for offline mode";
-const String PERMISSION_FAILURE_MESSAGE =
-    "Permission error: NooberCaster was not permitted to locate device location";
-const String INPUT_FAILURE_MESSAGE =
-    "Input error: no location matched the input, please try again";
 
 class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
   final GetLocalWeatherData getLocalWeatherData;
@@ -83,7 +75,7 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
   Stream<WeatherDataState> _getLocationWeatherResult(String location) async* {
     final isValid = validator.validate(location);
     if (!isValid) {
-      yield WeatherDataError(message: INPUT_FAILURE_MESSAGE);
+      yield WeatherDataError(message: translateInputErrorMessage());
     } else {
       final failureOrData =
           await getLocationWeatherData(Params(location: location));
@@ -102,12 +94,12 @@ class WeatherDataBloc extends Bloc<WeatherDataEvent, WeatherDataState> {
 
   String _mapFailureToMessage(Failure failure) {
     return failure is ServerFailure
-        ? SERVER_FAILURE_MESSAGE
+        ? translateServerErrorMessage()
         : failure is CacheFailure
-            ? CACHE_FAILURE_MESSAGE
+            ? translateCacheErrorMessage()
             : failure is PermissionFailure
-                ? PERMISSION_FAILURE_MESSAGE
-                : INPUT_FAILURE_MESSAGE;
+                ? translateLocationErrorMessage()
+                : translateInputErrorMessage();
   }
 
   Stream<WeatherDataState> _getCachedWeatherDataResults() async* {

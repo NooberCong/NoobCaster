@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/city_list.dart';
 import 'package:noobcaster/core/speech%20recognition/speech_recognition.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
@@ -72,7 +73,7 @@ class _SearchRouteState extends State<SearchRoute> {
               textFieldConfiguration: TextFieldConfiguration(
                 controller: _controller,
                 decoration: InputDecoration(
-                  hintText: "Type something",
+                  hintText: translateTypeSomething(),
                   hintStyle: TextStyle(color: Colors.grey.shade500),
                   suffix: IconButton(
                     splashColor: Colors.transparent,
@@ -116,7 +117,7 @@ class _SearchRouteState extends State<SearchRoute> {
           Expanded(
             child: Center(
               child: Text(
-                "Enter a location",
+                translateEnterALocation(),
                 style: TextStyle(
                   color: Colors.grey.shade600,
                   fontSize: 18,
@@ -192,8 +193,8 @@ class _SearchRouteState extends State<SearchRoute> {
 
   String _titleFromState() {
     if (!_isListening) {
-      return "Search";
+      return translateSearch();
     }
-    return "Listening...";
+    return translateListening();
   }
 }

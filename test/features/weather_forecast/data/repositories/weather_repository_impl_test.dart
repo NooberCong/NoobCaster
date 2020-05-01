@@ -374,4 +374,18 @@ void main() {
       expect(result, Left(CacheFailure()));
     });
   });
+  group("clearCachedLocationWeatherData", () {
+    test("Should call method on localWeatherSource", () async {
+      //act
+      await repository.clearCachedLocationWeatherData();
+      //assert
+      verify(mockLocalWeatherDataSource.clearLocationWeatherDataCache());
+    });
+    test("Should return null", () async {
+      //act
+      final result = await repository.clearCachedLocationWeatherData();
+      //assert
+      expect(result, Right(null));
+    });
+  });
 }

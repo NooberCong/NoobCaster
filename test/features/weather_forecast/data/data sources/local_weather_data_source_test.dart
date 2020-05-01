@@ -149,4 +149,11 @@ void main() {
           json.encode(jsonList.reversed.toList())));
     });
   });
+  test("Should empty cached location weather data", () {
+    //act
+    localWeatherDataSource.clearLocationWeatherDataCache();
+    //assert
+    verify(mockSharedPreferences.setString(
+        CACHED_LOCATION_WEATHER_DATA, json.encode([])));
+  });
 }

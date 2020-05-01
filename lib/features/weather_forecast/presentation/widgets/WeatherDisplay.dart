@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/util/description_formatter.dart';
 import 'package:noobcaster/core/util/temp_converter.dart';
 import 'package:noobcaster/core/util/time_converter.dart';
-import 'package:noobcaster/core/util/uvi_evaluator.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/widgets/DataSnapshot.dart';
@@ -116,31 +116,39 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        DataSnapshot(
-                          textUpper: "Uv level",
-                          textLower: "${getUviLevel(widget.data.uvi)}",
-                          icon: FaIcon(
-                            FontAwesomeIcons.sun,
-                            size: 36,
-                            color: Colors.white,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: DataSnapshot(
+                            textUpper: translateUVDescription(),
+                            textLower: translateUVLevel(widget.data.uvi),
+                            icon: FaIcon(
+                              FontAwesomeIcons.sun,
+                              size: 36,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        DataSnapshot(
-                          textUpper: "Wind",
-                          textLower: "${widget.data.windspeed}m/s",
-                          icon: FaIcon(
-                            FontAwesomeIcons.wind,
-                            color: Colors.white,
-                            size: 36,
+                        Center(
+                          child: DataSnapshot(
+                            textUpper: translateWind(),
+                            textLower: "${widget.data.windspeed}m/s",
+                            icon: FaIcon(
+                              FontAwesomeIcons.wind,
+                              color: Colors.white,
+                              size: 36,
+                            ),
                           ),
                         ),
-                        DataSnapshot(
-                          textUpper: "Humidity",
-                          textLower: "${widget.data.humidity}%",
-                          icon: FaIcon(
-                            FontAwesomeIcons.tint,
-                            color: Colors.white,
-                            size: 36,
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: DataSnapshot(
+                            textUpper: translateHumidity(),
+                            textLower: "${widget.data.humidity}%",
+                            icon: FaIcon(
+                              FontAwesomeIcons.tint,
+                              color: Colors.white,
+                              size: 36,
+                            ),
                           ),
                         ),
                       ],
@@ -169,7 +177,9 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                     child: Align(
                         alignment: Alignment.bottomRight,
                         child: Text(
-                          (widget.data.isCached ? "Cached " : "Updated ") +
+                          (widget.data.isCached
+                                  ? "${translateCached()} "
+                                  : "${translateUpdated()} ") +
                               formattedTime(widget.data.dateTime),
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         )),

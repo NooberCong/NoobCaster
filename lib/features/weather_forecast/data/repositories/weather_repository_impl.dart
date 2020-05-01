@@ -105,4 +105,9 @@ class WeatherRepositoryImpl implements WeatherRepository {
   bool _isEmpty(List<Placemark> placemarks) {
     return placemarks.length == 0;
   }
+
+  @override
+  Future<Either<Failure, void>> clearCachedLocationWeatherData() async {
+    return Right(localDataSource.clearLocationWeatherDataCache());
+  }
 }

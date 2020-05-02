@@ -74,7 +74,7 @@ class _SearchRouteState extends State<SearchRoute> {
                 controller: _controller,
                 decoration: InputDecoration(
                   hintText: translateTypeSomething(),
-                  hintStyle: TextStyle(color: Colors.grey.shade500),
+                  hintStyle: TextStyle(color: Theme.of(context).hintColor),
                   suffix: IconButton(
                     splashColor: Colors.transparent,
                     onPressed: _clearKeyboard,
@@ -115,12 +115,15 @@ class _SearchRouteState extends State<SearchRoute> {
             ),
           ),
           Expanded(
-            child: Center(
-              child: Text(
-                translateEnterALocation(),
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 18,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 52),
+              child: Center(
+                child: Text(
+                  translateEnterALocation(),
+                  style: TextStyle(
+                    color: Theme.of(context).hintColor,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ),

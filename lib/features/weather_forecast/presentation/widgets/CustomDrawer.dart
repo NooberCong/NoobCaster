@@ -65,9 +65,16 @@ class CustomDrawer extends StatelessWidget {
       AsyncSnapshot<Either<Failure, Map<String, dynamic>>> snapshot) {
     if (snapshot.hasData) {
       return snapshot.data.fold(
-        (failure) => Text(
-          translateNoData(),
-          style: TextStyle(color: Colors.white, fontSize: 16),
+        (failure) => Expanded(
+          child: Center(
+            child: Text(
+              translateNoData(),
+              style: TextStyle(
+                color: Theme.of(context).hintColor,
+                fontSize: 16,
+              ),
+            ),
+          ),
         ),
         (cachedData) => Expanded(
           child: Column(

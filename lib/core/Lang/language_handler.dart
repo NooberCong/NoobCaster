@@ -2,6 +2,7 @@ import 'package:noobcaster/core/Lang/translations/DrawerTranslations.dart';
 import 'package:noobcaster/core/Lang/translations/FailureMessageTranslations.dart';
 import 'package:noobcaster/core/Lang/translations/SearchRouteTranslations.dart';
 import 'package:noobcaster/core/Lang/translations/SettingsRouteTranslations.dart';
+import 'package:noobcaster/core/Lang/translations/WeatherConditionsTranslations.dart';
 import 'package:noobcaster/core/Lang/translations/WeatherDataTranslations.dart';
 import 'package:noobcaster/core/settings/app_settings.dart';
 import 'package:noobcaster/injection_container.dart';
@@ -131,4 +132,64 @@ String translateLocationErrorMessage() {
 
 String translateInputErrorMessage() {
   return INPUTERRORMESSAGE[sl<AppSettings>().getLocale()];
+}
+
+String translateDescription(String description) {
+  return {
+    "thunderstorm with light rain": THUNDERSTORMWITHRAIN,
+    "thunderstorm with rain": THUNDERSTORMWITHRAIN,
+    "thunderstorm with heavy rain": THUNDERSTORMWITHRAIN,
+    "light thunderstorm": THUNDERSTORM,
+    "thunderstorm": THUNDERSTORM,
+    "heavy thunderstorm": THUNDERSTORM,
+    "ragged thunderstorm": THUNDERSTORM,
+    "thunderstorm with light drizzle": THUNDERSTORMWITHDRIZZLE,
+    "thunderstorm with drizzle": THUNDERSTORMWITHDRIZZLE,
+    "thunderstorm with heavy drizzle": THUNDERSTORMWITHDRIZZLE,
+    "light intensity drizzle": DRIZZLE,
+    "drizzle": DRIZZLE,
+    "heavy intensity drizzle": DRIZZLE,
+    "light intensity drizzle rain": DRIZZLE,
+    "drizzle rain": DRIZZLE,
+    "heavy intensity drizzle rain": DRIZZLE,
+    "shower rain and drizzle": DRIZZLE,
+    "heavy shower rain and drizzle": DRIZZLE,
+    "shower drizzle": DRIZZLE,
+    "light rain": RAIN,
+    "moderate rain": RAIN,
+    "heavy intensity rain": RAIN,
+    "very heavy rain": RAIN,
+    "extreme rain": RAIN,
+    "freezing rain": RAIN,
+    "light intensity shower rain": RAIN,
+    "shower rain": RAIN,
+    "heavy intensity shower rain": RAIN,
+    "ragged shower rain": RAIN,
+    "light snow": SNOW,
+    "Snow": SNOW,
+    "Heavy snow": SNOW,
+    "Sleet": SLEET,
+    "Light shower sleet": SLEET,
+    "Shower sleet": SLEET,
+    "Light rain and snow": SLEET,
+    "Rain and snow": SNOW,
+    "Light shower snow": SNOW,
+    "Shower snow": SNOW,
+    "Heavy shower snow": SNOW,
+    "mist": MIST,
+    "Smoke": MIST,
+    "Haze": MIST,
+    "sand/ dust whirls": SANDSTORM,
+    "fog": MIST,
+    "sand": SANDSTORM,
+    "dust": SANDSTORM,
+    "volcanic ash": ASH,
+    "squalls": GUST,
+    "tornado": TORNADO,
+    "clear sky": CLEAR,
+    "few clouds": SCATTERED,
+    "scattered clouds": SCATTERED,
+    "broken clouds": OVERCAST,
+    "overcast clouds": OVERCAST
+  }[description][sl<AppSettings>().getLocale()];
 }

@@ -5,7 +5,7 @@ import 'package:noobcaster/core/util/time_zone_handler.dart';
 import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
-import 'package:noobcaster/secrets/key.dart';
+import 'package:noobcaster/keys/key.dart';
 
 abstract class RemoteWeatherDataSource {
   Future<WeatherDataModel> getLocalWeatherData(Placemark placemark);

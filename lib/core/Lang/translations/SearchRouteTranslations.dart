@@ -25,7 +25,7 @@ const LISTENING = {
 };
 
 const TYPESOMETHING = {
-  "en_US": "Listening",
+  "en_US": "Type something",
   "pt_PT": "Digite algo",
   "hi_IN": "कुछ लिखो",
   "ko_KR": "무언가를 입력",

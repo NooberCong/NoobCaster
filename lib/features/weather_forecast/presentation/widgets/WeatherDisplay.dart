@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:noobcaster/core/Lang/language_handler.dart';
-import 'package:noobcaster/core/util/description_formatter.dart';
 import 'package:noobcaster/core/util/temp_converter.dart';
 import 'package:noobcaster/core/util/time_converter.dart';
 import 'package:noobcaster/features/weather_forecast/domain/entities/weather.dart';
@@ -99,7 +98,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                       ),
                       children: [
                         TextSpan(
-                          text: formatDescription(widget.data.description),
+                          text: translateDescription(widget.data.description),
                           style: TextStyle(
                               fontSize: 18,
                               color: Theme.of(context).accentColor,
@@ -113,8 +112,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Stack(
                       children: <Widget>[
                         Align(
                           alignment: Alignment.centerLeft,

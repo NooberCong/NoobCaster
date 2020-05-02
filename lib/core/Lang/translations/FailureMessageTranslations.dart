@@ -14,7 +14,7 @@ const SERVERERRORMESSAGE = {
 };
 
 const CACHEERRORMESSAGE = {
-  "en_US": "Listening",
+  "en_US": "Cache error: Could not find any cached data for offline mode",
   "pt_PT": "Erro de cache: nenhum dado em cache encontrado no modo offline",
   "hi_IN": "कैश त्रुटि: ऑफ़लाइन मोड के लिए कोई कैश्ड डेटा नहीं मिला",
   "ko_KR": "캐시 오류 : 오프라인 모드에 대한 캐시 된 데이터가 없습니다.",

@@ -111,7 +111,7 @@ const HOUR = {
   "ja_JP": "毎時（48時間）",
   "fr_FR": "Toutes les heures (48 heures)",
   "es_ES": "Por hora (48 horas)",
-  "vi_VN": "Theo Giờ(48 giờ)",
+  "vi_VN": "Hàng Giờ(48 giờ)",
   "cmn_CN": "每小时（48小时）"
 };
 
@@ -124,7 +124,7 @@ const DAY = {
   "ja_JP": "毎日（8日）",
   "fr_FR": "Tous les jours (8 jours)",
   "es_ES": "Diario (8 días)",
-  "vi_VN": "Theo ngày(8 ngày)",
+  "vi_VN": "Hàng ngày(8 ngày)",
   "cmn_CN": "每日（8天）"
 };
 

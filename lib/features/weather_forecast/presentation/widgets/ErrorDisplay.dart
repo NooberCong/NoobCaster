@@ -13,7 +13,10 @@ class ErrorDisplay extends StatelessWidget {
         ),
         child: Text(
           message,
-          style: TextStyle(color: Colors.grey.shade500, fontSize: 16),
+          style: TextStyle(
+            color: Theme.of(context).hintColor,
+            fontSize: 16,
+          ),
         ),
       ),
     );

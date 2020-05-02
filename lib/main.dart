@@ -26,8 +26,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        theme:
-            ThemeData(fontFamily: "OpenSans", accentColor: Color(0xffAEAEAE)),
+        theme: ThemeData(
+          fontFamily: "OpenSans",
+          accentColor: Color(0xffAEAEAE),
+          hintColor: Colors.grey.shade600,
+        ),
         onGenerateRoute: generateRoute,
         home: HomeScreen(),
       ),
@@ -68,10 +71,13 @@ class HomeScreen extends StatelessWidget {
                     .add(GetLocalWeatherEvent());
                 return SizedBox();
               } else if (state is WeatherDataLoading) {
-                return Center(
-                  child: CupertinoActivityIndicator(
-                    animating: true,
-                    radius: 15.0,
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 50.5),
+                  child: Center(
+                    child: CupertinoActivityIndicator(
+                      animating: true,
+                      radius: 15.0,
+                    ),
                   ),
                 );
               } else if (state is WeatherDataLoaded) {

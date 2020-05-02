@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/error/failure.dart';
+import 'package:noobcaster/core/settings/app_settings.dart';
 import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
 import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
@@ -13,6 +14,8 @@ import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_local_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
+import 'package:noobcaster/injection_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 

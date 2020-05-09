@@ -40,7 +40,7 @@ class WeatherDataModel extends WeatherData {
     return WeatherDataModel(
         isLocal: isLocal,
         isCached: false,
-        currentTemp: json["current"]["temp"],
+        currentTemp: (json["current"]["temp"] as num).toDouble(),
         uvi: (json["current"]["uvi"] as num).toDouble(),
         windspeed: (json["current"]["wind_speed"] as num).toDouble(),
         dateTime: handler.dateTimeFromUnixAndTimezone(
@@ -78,7 +78,7 @@ class WeatherDataModel extends WeatherData {
         isLocal: json["isLocal"],
         currentTemp: json["temp"],
         uvi: json["uvi"],
-        windspeed: (json["wind_speed"] as num).toDouble(),
+        windspeed: json["wind_speed"],
         dateTime: DateTime.parse(json["datetime"]),
         sunset: DateTime.parse(json["sunset"]),
         sunrise: DateTime.parse(json["sunrise"]),

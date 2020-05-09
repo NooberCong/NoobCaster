@@ -6,7 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 import 'package:noobcaster/core/error/exceptions.dart';
 import 'package:noobcaster/core/util/time_zone_handler.dart';
-import 'package:noobcaster/features/weather_forecast/data/data%20sources/remote_weather_data_source.dart';
+import 'package:noobcaster/features/weather_forecast/data/data_sources/remote_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
 import 'package:noobcaster/keys/key.dart';
 

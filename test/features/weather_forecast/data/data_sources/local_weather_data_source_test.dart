@@ -3,7 +3,7 @@ import 'package:matcher/matcher.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:noobcaster/core/error/exceptions.dart';
-import 'package:noobcaster/features/weather_forecast/data/data%20sources/local_weather_data_source.dart';
+import 'package:noobcaster/features/weather_forecast/data/data_sources/local_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

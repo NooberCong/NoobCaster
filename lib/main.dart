@@ -74,9 +74,7 @@ class HomeScreen extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.only(bottom: 50.5),
                   child: Center(
-                    child: CupertinoActivityIndicator(
-                      animating: true,
-                      radius: 15.0,
+                    child: CircularProgressIndicator(
                     ),
                   ),
                 );

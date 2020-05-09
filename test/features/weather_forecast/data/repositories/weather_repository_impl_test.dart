@@ -7,8 +7,8 @@ import 'package:noobcaster/core/error/exceptions.dart';
 import 'package:noobcaster/core/error/failure.dart';
 import 'package:noobcaster/core/network/network_info.dart';
 import 'package:noobcaster/core/settings/app_settings.dart';
-import 'package:noobcaster/features/weather_forecast/data/data%20sources/local_weather_data_source.dart';
-import 'package:noobcaster/features/weather_forecast/data/data%20sources/remote_weather_data_source.dart';
+import 'package:noobcaster/features/weather_forecast/data/data_sources/local_weather_data_source.dart';
+import 'package:noobcaster/features/weather_forecast/data/data_sources/remote_weather_data_source.dart';
 import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
 import 'package:noobcaster/features/weather_forecast/data/repositories/weather_repository_impl.dart';
 

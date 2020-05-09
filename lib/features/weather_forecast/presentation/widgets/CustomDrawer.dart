@@ -37,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(right: 20),
                     child: IconButton(
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).focusColor,
                       icon: FaIcon(FontAwesomeIcons.cog),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -147,7 +147,7 @@ class CachedWeatherCard extends StatelessWidget {
             data.isLocal
                 ? Icon(
                     Icons.location_on,
-                    color: Colors.blue,
+                    color: Theme.of(context).accentColor,
                     size: 24,
                   )
                 : SizedBox(),
@@ -159,7 +159,7 @@ class CachedWeatherCard extends StatelessWidget {
                 data.displayName,
                 maxLines: 3,
                 style: TextStyle(
-                    color: data.isLocal ? Colors.blue : Colors.white,
+                    color: data.isLocal ? Theme.of(context).accentColor : Colors.white,
                     fontSize: 16),
               ),
             ),

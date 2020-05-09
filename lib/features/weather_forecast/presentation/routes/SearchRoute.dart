@@ -145,7 +145,7 @@ class _SearchRouteState extends State<SearchRoute> {
               text: TextSpan(
                 text: match.substring(0, text.length),
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: Theme.of(context).accentColor,
                   fontSize: 20,
                 ),
                 children: [
@@ -191,7 +191,7 @@ class _SearchRouteState extends State<SearchRoute> {
     if (!_isListening) {
       return Colors.white;
     }
-    return Colors.blue;
+    return Theme.of(context).accentColor;
   }
 
   String _titleFromState() {

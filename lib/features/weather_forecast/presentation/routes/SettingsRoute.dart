@@ -49,14 +49,14 @@ class _SettingsRouteState extends State<SettingsRoute> {
                     DropdownMenuItem(
                       child: Text(
                         "°C",
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: Theme.of(context).accentColor),
                       ),
                       value: "°C",
                     ),
                     DropdownMenuItem(
                       child: Text(
                         "°F",
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: Theme.of(context).accentColor),
                       ),
                       value: "°F",
                     ),
@@ -129,7 +129,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
             value: Locales[locale],
             child: Text(
               locale,
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: Theme.of(context).accentColor),
             ),
           ),
         )

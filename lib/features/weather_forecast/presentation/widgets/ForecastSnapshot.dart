@@ -84,7 +84,7 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
                       child: Container(
                         child: Icon(
                           Icons.arrow_back,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).focusColor,
                           size: 30,
                         ),
                       ),
@@ -118,7 +118,7 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
                       child: Container(
                         child: Icon(
                           Icons.arrow_forward,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).focusColor,
                           size: 30,
                         ),
                       ),

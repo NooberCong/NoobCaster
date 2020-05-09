@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: "OpenSans",
-          accentColor: Color(0xffAEAEAE),
+          focusColor: Color(0xffAEAEAE),
+          accentColor: Colors.blue,
           hintColor: Colors.grey.shade600,
         ),
         onGenerateRoute: generateRoute,
@@ -75,6 +76,7 @@ class HomeScreen extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 50.5),
                   child: Center(
                     child: CircularProgressIndicator(
+                      strokeWidth: 1,
                     ),
                   ),
                 );

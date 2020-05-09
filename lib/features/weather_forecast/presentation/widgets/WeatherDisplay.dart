@@ -71,7 +71,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).focusColor,
                             ),
                           ),
                         ]),
@@ -101,7 +101,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                           text: translateDescription(widget.data.description),
                           style: TextStyle(
                               fontSize: 18,
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).focusColor,
                               fontWeight: FontWeight.w600),
                         ),
                       ],

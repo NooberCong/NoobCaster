@@ -11,7 +11,7 @@ import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_d
 import 'package:noobcaster/injection_container.dart' as di;
 import 'package:noobcaster/route_handler.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -28,12 +28,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: "OpenSans",
-          focusColor: Color(0xffAEAEAE),
+          focusColor: const Color(0xffAEAEAE),
           accentColor: Colors.blue,
           hintColor: Colors.grey.shade600,
         ),
         onGenerateRoute: generateRoute,
-        home: HomeScreen(),
+        home: const HomeScreen(),
       ),
     );
   }
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       backgroundColor: Colors.black,
       body: buildBody(context),
     );
@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
   Widget buildBody(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Positioned(
+        const Positioned(
           top: 0,
           left: 0,
           right: 0,
@@ -70,9 +70,9 @@ class HomeScreen extends StatelessWidget {
               if (state is WeatherDataInitial) {
                 BlocProvider.of<WeatherDataBloc>(context)
                     .add(GetLocalWeatherEvent());
-                return SizedBox();
+                return const SizedBox();
               } else if (state is WeatherDataLoading) {
-                return Padding(
+                return const Padding(
                   padding: EdgeInsets.only(bottom: 50.5),
                   child: Center(
                     child: CircularProgressIndicator(
@@ -87,7 +87,7 @@ class HomeScreen extends StatelessWidget {
               } else if (state is WeatherDataError) {
                 return ErrorDisplay(message: state.message);
               }
-              return SizedBox();
+              return const SizedBox();
             },
           ),
         ),

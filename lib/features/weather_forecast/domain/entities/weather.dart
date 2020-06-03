@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 abstract class Weather extends Equatable {
+  @override
   List<Object> get props;
 }
 
@@ -12,6 +13,7 @@ class WeatherData extends Weather {
   final DateTime sunrise;
   final DateTime sunset;
   final double currentTemp;
+  final double feelsLike;
   final double uvi;
   final double windspeed;
   final int humidity;
@@ -26,6 +28,7 @@ class WeatherData extends Weather {
       @required this.isLocal,
       @required this.dateTime,
       @required this.currentTemp,
+      @required this.feelsLike,
       @required this.uvi,
       @required this.windspeed,
       @required this.sunrise,
@@ -39,6 +42,7 @@ class WeatherData extends Weather {
   @override
   List<Object> get props => [
         currentTemp,
+        feelsLike,
         uvi,
         windspeed,
         sunrise,

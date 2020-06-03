@@ -22,6 +22,7 @@ void main() {
       isLocal: true,
       dateTime: dateTime,
       currentTemp: 34.2,
+      feelsLike: 30.3,
       windspeed: 8.4,
       daily: [],
       hourly: [],

@@ -14,7 +14,6 @@ const Map<String, String> Locales = {
   "普通话": "cmn_CN",
 };
 
-
 const TEMP_CONFIG = "TEMP_CONFIG";
 const LOCALE_CONFIG = "LOCALE_CONFIG";
 
@@ -35,7 +34,7 @@ class AppSettingsImpl implements AppSettings {
 
   @override
   String getTempUnit() {
-    return preferences.get(TEMP_CONFIG) ?? "°C";
+    return preferences.get(TEMP_CONFIG) as String ?? "°C";
   }
 
   @override

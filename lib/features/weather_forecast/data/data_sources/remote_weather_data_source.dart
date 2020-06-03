@@ -24,7 +24,7 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
     final response = await _responseFromServer(placemark.position);
     if (response.statusCode == 200) {
       return WeatherDataModel.fromServerJsonWithTimezone(
-        json.decode(response.body),
+        json.decode(response.body) as Map<String, dynamic>,
         displayName: displayName,
         handler: timezoneHandler,
         isLocal: true,
@@ -40,7 +40,7 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
     final response = await _responseFromServer(placemark.position);
     if (response.statusCode == 200) {
       return WeatherDataModel.fromServerJsonWithTimezone(
-        json.decode(response.body),
+        json.decode(response.body) as Map<String, dynamic>,
         displayName: displayName,
         handler: timezoneHandler,
         isLocal: false,
@@ -50,16 +50,16 @@ class RemoteWeatherDataSourceImpl implements RemoteWeatherDataSource {
   }
 
   String _getValidDisplayName(String locality, String name) {
-    if (locality.length > 0) {
+    if (locality.isNotEmpty) {
       return locality;
-    } else if (name.length > 0) {
+    } else if (name.isNotEmpty) {
       return name;
     }
     return "Unknown";
   }
 
   Future<http.Response> _responseFromServer(Position position) async {
-    return await client.get(
+    return client.get(
       Uri.http("api.openweathermap.org", "/data/2.5/onecall", {
         "lon": position.longitude.toString(),
         "lat": position.latitude.toString(),

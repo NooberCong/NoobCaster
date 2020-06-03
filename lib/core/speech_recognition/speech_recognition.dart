@@ -12,6 +12,7 @@ abstract class VoiceRecognition {
 
 class VoiceRecognitionImpl implements VoiceRecognition {
   StreamController _controller;
+  @override
   Stream get stream {
     _controller = StreamController();
     return _controller.stream;
@@ -26,12 +27,12 @@ class VoiceRecognitionImpl implements VoiceRecognition {
   }
 
   @override
-  void startListening() async {
+  Future<void> startListening() async {
     String result;
-    String settingsLocaleId = sl<AppSettings>().getLocale();
+    final String settingsLocaleId = sl<AppSettings>().getLocale();
     if (_available) {
       _speech.listen(
-          listenFor: Duration(minutes: 1),
+          listenFor: const Duration(minutes: 1),
           onResult: (results) {
             final alternates = results.alternates;
             result = alternates
@@ -56,7 +57,7 @@ class VoiceRecognitionImpl implements VoiceRecognition {
   }
 
   void _timeOutEndSpeech() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       _speech.stop();
       _controller.close();
     });

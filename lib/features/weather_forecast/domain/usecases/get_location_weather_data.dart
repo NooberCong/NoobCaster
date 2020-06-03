@@ -11,6 +11,6 @@ class GetLocationWeatherData implements UseCase<WeatherData, Params> {
   GetLocationWeatherData({@required this.repository});
   @override
   Future<Either<Failure, WeatherData>> call(Params params) async {
-    return await repository.getLocationWeather(params.location);
+    return repository.getLocationWeather(params.location);
   }
 }

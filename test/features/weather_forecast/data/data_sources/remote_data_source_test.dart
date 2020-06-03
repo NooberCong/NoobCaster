@@ -28,8 +28,8 @@ void main() {
   });
 
   void _getWeatherDataTest() {
-    Position position = Position(latitude: 12.2, longitude: -6.4);
-    Placemark placemark = Placemark(
+    final Position position = Position(latitude: 12.2, longitude: -6.4);
+    final Placemark placemark = Placemark(
       position: position,
       locality: "Tay Ninh",
       name: "Viet Nam",
@@ -64,7 +64,7 @@ void main() {
       expect(
         result,
         WeatherDataModel.fromServerJsonWithTimezone(
-          json.decode(fixture("remote_weather.json")),
+          json.decode(fixture("remote_weather.json")) as Map<String, dynamic>,
           displayName: "Tay Ninh",
           handler: mockTimezoneHandler,
         ),
@@ -89,7 +89,7 @@ void main() {
       //act
       final call = remoteDataSource.getLocalWeatherData;
       //assert
-      expect(() => call(placemark), throwsA(TypeMatcher<ServerError>()));
+      expect(() => call(placemark), throwsA(const TypeMatcher<ServerError>()));
     });
   }
 

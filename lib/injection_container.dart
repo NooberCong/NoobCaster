@@ -17,7 +17,7 @@ import 'package:noobcaster/features/weather_forecast/domain/usecases/get_locatio
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final sl = GetIt.I;
+final GetIt sl = GetIt.I;
 
 Future<void> init() async {
   //Features - WeatherData

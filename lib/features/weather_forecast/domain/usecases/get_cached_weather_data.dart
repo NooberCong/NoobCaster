@@ -9,6 +9,6 @@ class GetCachedWeatherData implements UseCase<Map<String, dynamic>, NoParams> {
   GetCachedWeatherData({@required this.repository});
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(NoParams noParams) async {
-    return await repository.getCachedWeather();
+    return repository.getCachedWeather();
   }
 }

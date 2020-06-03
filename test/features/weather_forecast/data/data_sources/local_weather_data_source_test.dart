@@ -14,11 +14,12 @@ class MockSharedPreferences extends Mock implements SharedPreferences {}
 void main() {
   MockSharedPreferences mockSharedPreferences;
   LocalWeatherDataSourceImpl localWeatherDataSource;
-  final cachedLocalWeatherData = WeatherDataModel.fromCacheJson(
-      json.decode(fixture("cached_local_weather.json")));
+  final cachedLocalWeatherData = WeatherDataModel.fromCacheJson(json
+      .decode(fixture("cached_local_weather.json")) as Map<String, dynamic>);
   final cachedLocationWeatherData =
       (json.decode(fixture("cached_location_weather.json")) as List<dynamic>)
-          .map((entry) => WeatherDataModel.fromCacheJson(entry))
+          .map((entry) =>
+              WeatherDataModel.fromCacheJson(entry as Map<String, dynamic>))
           .toList();
 
   setUp(() {
@@ -44,7 +45,7 @@ void main() {
       //act
       final call = localWeatherDataSource.getCachedLocalWeatherData;
       //assert
-      expect(() => call(), throwsA(TypeMatcher<CacheError>()));
+      expect(() => call(), throwsA(const TypeMatcher<CacheError>()));
     });
   });
   group("getCachedLocationWeatherData", () {
@@ -69,11 +70,11 @@ void main() {
     //act
     final call = localWeatherDataSource.getCachedWeatherData;
     //assert
-    expect(() => call(), throwsA(TypeMatcher<CacheError>()));
+    expect(() => call(), throwsA(const TypeMatcher<CacheError>()));
   });
   group("cacheLocalWeatherData", () {
-    final model = WeatherDataModel.fromCacheJson(
-        json.decode(fixture("cached_local_weather.json")));
+    final model = WeatherDataModel.fromCacheJson(json
+        .decode(fixture("cached_local_weather.json")) as Map<String, dynamic>);
     test("Should call toJson method and cache weather data", () {
       //act
       localWeatherDataSource.cacheLocalWeatherData(model);
@@ -85,10 +86,11 @@ void main() {
   group("cacheLocationWeatherData", () {
     final modelList =
         (json.decode(fixture("cached_location_weather.json")) as List<dynamic>)
-            .map((entry) => WeatherDataModel.fromCacheJson(entry))
+            .map((entry) =>
+                WeatherDataModel.fromCacheJson(entry as Map<String, dynamic>))
             .toList();
-    final model = WeatherDataModel.fromCacheJson(
-        json.decode(fixture("cached_local_weather.json")));
+    final model = WeatherDataModel.fromCacheJson(json
+        .decode(fixture("cached_local_weather.json")) as Map<String, dynamic>);
     test("Should call toJson method and cache weather data", () {
       //arrange
       modelList.add(model);
@@ -125,7 +127,8 @@ void main() {
       expect(
           result,
           WeatherDataModel.fromCacheJson(
-              json.decode(fixture("cached_location_weather.json"))[0]));
+              json.decode(fixture("cached_location_weather.json"))[0]
+                  as Map<String, dynamic>));
     });
     test("Should throw cache error when cache miss", () {
       //arrange
@@ -134,7 +137,8 @@ void main() {
       //act
       final call = localWeatherDataSource.getCachedLocationWeatherData;
       //assert
-      expect(() => call("Not in cache"), throwsA(TypeMatcher<CacheError>()));
+      expect(
+          () => call("Not in cache"), throwsA(const TypeMatcher<CacheError>()));
     });
     test("Should move the matching json to top of list", () async {
       final jsonList =

@@ -5,7 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noobcaster/core/Lang/language_handler.dart';
 import 'package:noobcaster/core/error/failure.dart';
-import 'package:noobcaster/core/settings/app_settings.dart';
 import 'package:noobcaster/core/usecases/usecase.dart';
 import 'package:noobcaster/core/util/input_validator.dart';
 import 'package:noobcaster/features/weather_forecast/data/models/weather_forcast_model.dart';
@@ -14,8 +13,6 @@ import 'package:noobcaster/features/weather_forecast/domain/usecases/get_cached_
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_local_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/domain/usecases/get_location_weather_data.dart';
 import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_data_bloc.dart';
-import 'package:noobcaster/injection_container.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 
@@ -34,13 +31,14 @@ void main() {
   MockGetLocationWeatherData mockGetLocationWeatherData;
   MockGetCachedWeatherData mockGetCachedWeatherData;
   MockInputValidator mockInputValidator;
-  final city = "Tay Ninh";
+  const city = "Tay Ninh";
   final dateTime = DateTime(1212, 12, 12, 12, 12);
   final localData = WeatherData(
       isCached: false,
       isLocal: true,
       windspeed: 8.4,
       currentTemp: 12.2,
+      feelsLike: 22.2,
       daily: [],
       dateTime: dateTime,
       description: "hot",
@@ -56,6 +54,7 @@ void main() {
       isLocal: false,
       windspeed: 8.4,
       currentTemp: 12.2,
+      feelsLike: 32.2,
       daily: [],
       dateTime: dateTime,
       description: "hot",
@@ -250,7 +249,8 @@ void main() {
   group("GetCachedWeatherDataEvent", () {
     final cachedData =
         (json.decode(fixture("cached_location_weather.json")) as List<dynamic>)
-            .map((entry) => WeatherDataModel.fromCacheJson(entry))
+            .map((entry) =>
+                WeatherDataModel.fromCacheJson(entry as Map<String, dynamic>))
             .toList();
     test(
         "Should emit [WeatherDataInitial, CacheWeatherDataLoaded] if there is cached data",
@@ -295,7 +295,8 @@ void main() {
         () {
       //arrange
       final model = WeatherDataModel.fromCacheJson(
-          json.decode(fixture("cached_local_weather.json")));
+          json.decode(fixture("cached_local_weather.json"))
+              as Map<String, dynamic>);
       //assert later
       final expectedStates = [
         WeatherDataInitial(),

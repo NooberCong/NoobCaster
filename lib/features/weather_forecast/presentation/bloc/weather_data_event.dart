@@ -11,7 +11,7 @@ class GetLocalWeatherEvent extends WeatherDataEvent {
 
 class GetLocationWeatherEvent extends WeatherDataEvent {
   final String location;
-  GetLocationWeatherEvent(this.location);
+  const GetLocationWeatherEvent(this.location);
   @override
   List<Object> get props => [];
 }
@@ -19,7 +19,7 @@ class GetLocationWeatherEvent extends WeatherDataEvent {
 class RefreshWeatherDataEvent extends WeatherDataEvent {
   final WeatherData data;
 
-  RefreshWeatherDataEvent(this.data);
+  const RefreshWeatherDataEvent(this.data);
   @override
   List<Object> get props => [data];
 }
@@ -31,7 +31,7 @@ class GetCachedWeatherDataEvent extends WeatherDataEvent {
 
 class ReloadStateEvent extends WeatherDataEvent {
   final WeatherDataState currentState;
-  ReloadStateEvent({@required this.currentState});
+  const ReloadStateEvent({@required this.currentState});
   @override
   List<Object> get props => [currentState];
 }

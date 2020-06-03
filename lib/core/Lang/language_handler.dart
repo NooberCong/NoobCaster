@@ -193,3 +193,7 @@ String translateDescription(String description) {
     "overcast clouds": OVERCAST
   }[description][sl<AppSettings>().getLocale()];
 }
+
+String translateFeelsLike() {
+  return FEELSLIKE[sl<AppSettings>().getLocale()];
+}

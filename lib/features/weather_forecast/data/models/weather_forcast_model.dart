@@ -12,6 +12,7 @@ class WeatherDataModel extends WeatherData {
       @required DateTime sunrise,
       @required DateTime sunset,
       @required double currentTemp,
+      @required double feelsLike,
       @required double uvi,
       @required double windspeed,
       @required String displayName,
@@ -25,6 +26,7 @@ class WeatherDataModel extends WeatherData {
             isLocal: isLocal,
             dateTime: dateTime,
             currentTemp: currentTemp,
+            feelsLike: feelsLike,
             uvi: uvi,
             windspeed: windspeed,
             sunrise: sunrise,
@@ -41,56 +43,60 @@ class WeatherDataModel extends WeatherData {
         isLocal: isLocal,
         isCached: false,
         currentTemp: (json["current"]["temp"] as num).toDouble(),
+        feelsLike: (json["current"]["feels_like"] as num).toDouble(),
         uvi: (json["current"]["uvi"] as num).toDouble(),
         windspeed: (json["current"]["wind_speed"] as num).toDouble(),
         dateTime: handler.dateTimeFromUnixAndTimezone(
-            json["timezone"], json["current"]["dt"]),
+            json["timezone"] as String, json["current"]["dt"] as int),
         sunset: handler.dateTimeFromUnixAndTimezone(
-            json["timezone"], json["current"]["sunset"]),
+            json["timezone"] as String, json["current"]["sunset"] as int),
         sunrise: handler.dateTimeFromUnixAndTimezone(
-            json["timezone"], json["current"]["sunrise"]),
-        icon: json["current"]["weather"][0]["icon"],
-        humidity: json["current"]["humidity"],
+            json["timezone"] as String, json["current"]["sunrise"] as int),
+        icon: json["current"]["weather"][0]["icon"] as String,
+        humidity: (json["current"]["humidity"] as num).toInt(),
         displayName: displayName,
-        description: json["current"]["weather"][0]["description"],
+        description: json["current"]["weather"][0]["description"] as String,
         hourly: (json["hourly"] as List<dynamic>)
             .map(
               (hour) => HourlyWeatherDataModel.fromServerJsonWithTimezone(
-                hour,
+                hour as Map<String, dynamic>,
                 handler,
-                json["timezone"],
+                json["timezone"] as String,
               ),
             )
             .toList(),
         daily: (json["daily"] as List<dynamic>)
             .map(
               (day) => DailyWeatherDataModel.fromServerJsonWithTimezone(
-                day,
+                day as Map<String, dynamic>,
                 handler,
-                json["timezone"],
+                json["timezone"] as String,
               ),
             )
             .toList());
   }
   factory WeatherDataModel.fromCacheJson(Map<String, dynamic> json) {
     return WeatherDataModel(
-        isCached: json["isCached"],
-        isLocal: json["isLocal"],
-        currentTemp: json["temp"],
-        uvi: json["uvi"],
-        windspeed: json["wind_speed"],
-        dateTime: DateTime.parse(json["datetime"]),
-        sunset: DateTime.parse(json["sunset"]),
-        sunrise: DateTime.parse(json["sunrise"]),
-        icon: json["icon"],
-        humidity: json["humidity"],
-        displayName: json["displayName"],
-        description: json["description"],
+        isCached: json["isCached"] as bool,
+        isLocal: json["isLocal"] as bool,
+        currentTemp: json["temp"] as double,
+        feelsLike: json["feelsLike"] as double,
+        uvi: json["uvi"] as double,
+        windspeed: json["wind_speed"] as double,
+        dateTime: DateTime.parse(json["datetime"] as String),
+        sunset: DateTime.parse(json["sunset"] as String),
+        sunrise: DateTime.parse(json["sunrise"] as String),
+        icon: json["icon"] as String,
+        humidity: json["humidity"] as int,
+        displayName: json["displayName"] as String,
+        description: json["description"] as String,
         hourly: (json["hourly"] as List<dynamic>)
-            .map((hour) => HourlyWeatherDataModel.fromCacheJson(hour))
+            .map((hour) => HourlyWeatherDataModel.fromCacheJson(
+                hour as Map<String, dynamic>))
             .toList(),
         daily: (json["daily"] as List<dynamic>)
-            .map((day) => DailyWeatherDataModel.fromCacheJson(day))
+            .map((day) => DailyWeatherDataModel.fromCacheJson(
+                day as Map<String, dynamic>))
             .toList());
   }
   Map<String, dynamic> toJson() {
@@ -100,6 +106,7 @@ class WeatherDataModel extends WeatherData {
       "datetime": dateTime.toString().substring(0, 19),
       "displayName": displayName,
       "temp": currentTemp,
+      "feelsLike": feelsLike,
       "uvi": uvi,
       "wind_speed": windspeed,
       "sunset": sunset.toString().substring(0, 19),

@@ -18,18 +18,19 @@ class DailyWeatherDataModel extends DailyWeatherData {
   factory DailyWeatherDataModel.fromServerJsonWithTimezone(
       Map<String, dynamic> json, TimezoneHandler handler, String timezone) {
     return DailyWeatherDataModel(
-        humidity: json["humidity"],
-        icon: json["weather"][0]["icon"],
-        weekday:
-            handler.dateTimeFromUnixAndTimezone(timezone, json["dt"]).weekday,
+        humidity: (json["humidity"] as num).toInt(),
+        icon: json["weather"][0]["icon"] as String,
+        weekday: handler
+            .dateTimeFromUnixAndTimezone(timezone, json["dt"] as int)
+            .weekday,
         maxTemp: (json["temp"]["max"] as num).toDouble(),
         minTemp: (json["temp"]["min"] as num).toDouble());
   }
   factory DailyWeatherDataModel.fromCacheJson(Map<String, dynamic> json) {
     return DailyWeatherDataModel(
-        humidity: json["humidity"],
-        icon: json["icon"],
-        weekday: json["weekday"],
+        humidity: json["humidity"] as int,
+        icon: json["icon"] as String,
+        weekday: json["weekday"] as int,
         maxTemp: (json["max"] as num).toDouble(),
         minTemp: (json["min"] as num).toDouble());
   }

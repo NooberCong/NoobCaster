@@ -34,7 +34,8 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
       //Remove duplicate values
       final locationWeatherData = _duplicatesRemoved(
           (json.decode(cachedData) as List<dynamic>)
-              .map((entry) => WeatherDataModel.fromCacheJson(entry))
+              .map((entry) =>
+                  WeatherDataModel.fromCacheJson(entry as Map<String, dynamic>))
               .toList(),
           model);
       if (locationWeatherData.length == 5) {
@@ -55,8 +56,8 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
   Future<WeatherDataModel> getCachedLocalWeatherData() {
     final cachedData = sharedPreferences.getString(CACHED_LOCAL_WEATHER_DATA);
     if (cachedData != null) {
-      return Future.value(
-          WeatherDataModel.fromCacheJson(json.decode(cachedData)));
+      return Future.value(WeatherDataModel.fromCacheJson(
+          json.decode(cachedData) as Map<String, dynamic>));
     } else {
       throw CacheError();
     }
@@ -81,7 +82,8 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
         jsonList.add(cacheHit);
         sharedPreferences.setString(
             CACHED_LOCATION_WEATHER_DATA, json.encode(jsonList));
-        return Future.value(WeatherDataModel.fromCacheJson(cacheHit));
+        return Future.value(
+            WeatherDataModel.fromCacheJson(cacheHit as Map<String, dynamic>));
       }
     }
     throw CacheError();
@@ -95,11 +97,12 @@ class LocalWeatherDataSourceImpl implements LocalWeatherDataSource {
         sharedPreferences.getString(CACHED_LOCAL_WEATHER_DATA);
     if (cachedLocalWeatherData != null) {
       return Future.value({
-        "local":
-            WeatherDataModel.fromCacheJson(json.decode(cachedLocalWeatherData)),
+        "local": WeatherDataModel.fromCacheJson(
+            json.decode(cachedLocalWeatherData) as Map<String, dynamic>),
         "location": cachedLocationWeatherData != null
             ? (json.decode(cachedLocationWeatherData) as List<dynamic>)
-                .map((entry) => WeatherDataModel.fromCacheJson(entry))
+                .map((entry) => WeatherDataModel.fromCacheJson(
+                    entry as Map<String, dynamic>))
                 .toList()
             : []
       });

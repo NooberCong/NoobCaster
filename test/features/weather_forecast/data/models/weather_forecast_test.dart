@@ -19,7 +19,7 @@ void main() {
     //assert
     expect(
         WeatherDataModel.fromServerJsonWithTimezone(
-          json.decode(fixture("remote_weather.json")),
+          json.decode(fixture("remote_weather.json")) as Map<String, dynamic>,
           displayName: "Tay Ninh",
           handler: mockTimezoneHandler,
         ),
@@ -27,13 +27,13 @@ void main() {
   });
   test("Should return a valid weather model from json", () {
     final Map<String, dynamic> jsonMap =
-        json.decode(fixture("remote_weather.json"));
+        json.decode(fixture("remote_weather.json")) as Map<String, dynamic>;
     //arrage
     when(mockTimezoneHandler.dateTimeFromUnixAndTimezone(any, any))
         .thenReturn(datetime);
     //act
     final model = WeatherDataModel.fromServerJsonWithTimezone(
-      json.decode(fixture("remote_weather.json")),
+      json.decode(fixture("remote_weather.json")) as Map<String, dynamic>,
       displayName: "Tay Ninh",
       handler: mockTimezoneHandler,
     );
@@ -51,7 +51,7 @@ void main() {
         .thenReturn(datetime);
     //act
     final model = WeatherDataModel.fromServerJsonWithTimezone(
-      json.decode(fixture("remote_weather.json")),
+      json.decode(fixture("remote_weather.json")) as Map<String, dynamic>,
       displayName: "Tay Ninh",
       handler: mockTimezoneHandler,
     );

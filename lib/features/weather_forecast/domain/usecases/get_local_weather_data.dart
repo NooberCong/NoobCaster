@@ -11,6 +11,6 @@ class GetLocalWeatherData implements UseCase<WeatherData, NoParams> {
   GetLocalWeatherData({@required this.repository});
   @override
   Future<Either<Failure, WeatherData>> call(NoParams noParams) async {
-    return await repository.getLocalWeather();
+    return repository.getLocalWeather();
   }
 }

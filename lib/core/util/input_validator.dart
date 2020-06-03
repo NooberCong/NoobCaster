@@ -3,7 +3,8 @@ abstract class InputValidator {
 }
 
 class InputValidatorImpl implements InputValidator {
+  @override
   bool validate(String input) {
-    return input.length > 0;
+    return input.isNotEmpty;
   }
 }

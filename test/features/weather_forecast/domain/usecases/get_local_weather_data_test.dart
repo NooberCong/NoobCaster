@@ -20,6 +20,7 @@ void main() {
       isCached: false,
       isLocal: true,
       currentTemp: 34.2,
+      feelsLike: 38.2,
       displayName: "Tay Ninh",
       dateTime: dateTime,
       windspeed: 8.4,

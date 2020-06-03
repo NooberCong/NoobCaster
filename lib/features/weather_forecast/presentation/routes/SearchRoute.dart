@@ -8,7 +8,7 @@ import 'package:noobcaster/features/weather_forecast/presentation/bloc/weather_d
 import 'package:noobcaster/injection_container.dart';
 
 class SearchRoute extends StatefulWidget {
-  SearchRoute({Key key}) : super(key: key);
+  const SearchRoute({Key key}) : super(key: key);
 
   @override
   _SearchRouteState createState() => _SearchRouteState();
@@ -29,6 +29,7 @@ class _SearchRouteState extends State<SearchRoute> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -44,7 +45,7 @@ class _SearchRouteState extends State<SearchRoute> {
         ),
         actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: 20),
+            padding: const EdgeInsets.only(right: 20),
             child: IconButton(
               onPressed: _getTextFromSpeech,
               icon: Icon(
@@ -85,22 +86,24 @@ class _SearchRouteState extends State<SearchRoute> {
                     ),
                   ),
                   focusedBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                 ),
-                onSubmitted: (input) => _searchLocation(input, context),
-                style: TextStyle(color: Colors.white),
+                onSubmitted: (input) =>
+                    _searchLocation(input as String, context),
+                style: const TextStyle(color: Colors.white),
                 keyboardType: TextInputType.text,
                 autofocus: true,
               ),
               suggestionsCallback: (text) =>
-                  text.length > 0 ? _getSuggestionText(text) : null,
+                  text.isNotEmpty ? _getSuggestionText(text) : null,
               itemBuilder: (context, suggestion) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      title: suggestion["widget"],
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20),
+                      title: suggestion["widget"] as Widget,
                     ),
                     Container(
                       color: Colors.grey[300].withOpacity(0.3),
@@ -111,12 +114,12 @@ class _SearchRouteState extends State<SearchRoute> {
                 );
               },
               onSuggestionSelected: (suggestion) =>
-                  _searchLocation(suggestion["text"], context),
+                  _searchLocation(suggestion["text"] as String, context),
             ),
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 52),
+              padding: const EdgeInsets.only(bottom: 52),
               child: Center(
                 child: Text(
                   translateEnterALocation(),
@@ -151,7 +154,7 @@ class _SearchRouteState extends State<SearchRoute> {
                 children: [
                   TextSpan(
                     text: match.substring(text.length),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                     ),
@@ -180,7 +183,7 @@ class _SearchRouteState extends State<SearchRoute> {
     });
     sl<VoiceRecognition>().stream.listen(
       (text) {
-        _controller.text = text;
+        _controller.text = text as String;
       },
       onDone: () => setState(() => _isListening = false),
     );

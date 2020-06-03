@@ -283,3 +283,16 @@ const CACHED = {
   "vi_VN": "Lưu trữ",
   "cmn_CN": "已缓存"
 };
+
+const FEELSLIKE = {
+  "en_US": "Feels like",
+  "pt_PT": "Parece",
+  "hi_IN": "की तरह लगना",
+  "ko_KR": "같은 느낌",
+  "ru_RU": "Как будто",
+  "ja_JP": "のように感じている",
+  "fr_FR": "Se sent comme",
+  "es_ES": "Se siente como",
+  "vi_VN": "Cảm giác như",
+  "cmn_CN": "感觉像"
+};

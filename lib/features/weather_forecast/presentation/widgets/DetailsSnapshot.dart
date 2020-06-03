@@ -14,14 +14,14 @@ class DetailsSnapshot extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(left: 40, bottom: 20),
+          padding: const EdgeInsets.only(left: 40, bottom: 20),
           child: Text(
             translateDetails(),
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.grey[300].withOpacity(0.2),
@@ -80,8 +80,8 @@ class DetailBar extends StatelessWidget {
           ],
         ),
         Text(
-          data,
-          style: TextStyle(color: Colors.white, fontSize: 16),
+          data as String,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
         )
       ],
     );

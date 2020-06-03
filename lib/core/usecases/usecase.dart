@@ -14,7 +14,7 @@ class NoParams extends Equatable {
 
 class Params extends Equatable {
   final String location;
-  Params({@required this.location});
+  const Params({@required this.location});
   @override
   List<Object> get props => [location];
 }

@@ -25,8 +25,8 @@ class _WeatherDisplayState extends State<WeatherDisplay>
   Animation<double> _opacityAnimation;
   @override
   void initState() {
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 850));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 850));
     _opacityAnimation = Tween<double>(
       begin: 0,
       end: 1,
@@ -38,7 +38,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.only(
+      borderRadius: const BorderRadius.only(
         topRight: Radius.circular(20),
         topLeft: Radius.circular(20),
       ),
@@ -47,21 +47,21 @@ class _WeatherDisplayState extends State<WeatherDisplay>
             BlocProvider.of<WeatherDataBloc>(context)
                 .add(RefreshWeatherDataEvent(widget.data))),
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: FadeTransition(
             opacity: _opacityAnimation,
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 60,
                   ),
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
                         text: "${widget.data.displayName}\n",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 30,
                             fontWeight: FontWeight.w500),
@@ -76,7 +76,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                           ),
                         ]),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   SvgPicture.asset(
@@ -84,7 +84,7 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                     width: MediaQuery.of(context).size.width / 3,
                     height: MediaQuery.of(context).size.width / 3,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   RichText(
@@ -98,20 +98,29 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                       ),
                       children: [
                         TextSpan(
+                          text:
+                              "${translateFeelsLike()} ${tempFromUnit(widget.data.feelsLike)}\n",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).focusColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
                           text: translateDescription(widget.data.description),
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 20,
                               color: Theme.of(context).focusColor,
-                              fontWeight: FontWeight.w600),
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 60,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Stack(
                       children: <Widget>[
                         Align(
@@ -152,26 +161,27 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 80,
                   ),
                   ForecastSnapshot<HourlyWeatherData>(
                     data: widget.data.hourly,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   ForecastSnapshot<DailyWeatherData>(
                     data: widget.data.daily,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   DetailsSnapshot(
                     data: widget.data,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 40),
                     child: Align(
                         alignment: Alignment.bottomRight,
                         child: Text(
@@ -179,7 +189,8 @@ class _WeatherDisplayState extends State<WeatherDisplay>
                                   ? "${translateCached()} "
                                   : "${translateUpdated()} ") +
                               formattedTime(widget.data.dateTime),
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
                         )),
                   )
                 ],

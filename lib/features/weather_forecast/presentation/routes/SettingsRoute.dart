@@ -24,7 +24,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
         backgroundColor: Colors.black,
         title: Text(
           translateSettings(),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -32,37 +32,37 @@ class _SettingsRouteState extends State<SettingsRoute> {
         ),
       ),
       body: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(40),
           topRight: Radius.circular(40),
         ),
         child: Container(
           color: Colors.grey.shade900,
           child: ListView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             children: <Widget>[
               SettingCard(
                 title: translateTempUnit(),
                 action: DropdownButton(
-                  underline: SizedBox(),
+                  underline: const SizedBox(),
                   items: [
                     DropdownMenuItem(
+                      value: "°C",
                       child: Text(
                         "°C",
                         style: TextStyle(color: Theme.of(context).accentColor),
                       ),
-                      value: "°C",
                     ),
                     DropdownMenuItem(
+                      value: "°F",
                       child: Text(
                         "°F",
                         style: TextStyle(color: Theme.of(context).accentColor),
                       ),
-                      value: "°F",
                     ),
                   ],
                   onChanged: (value) {
-                    _setTempUnit(value);
+                    _setTempUnit(value as String);
                     _reloadBlocState(context);
                     _rerender();
                   },
@@ -78,7 +78,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
                 expand: true,
                 title: translateLocale(),
                 action: DropdownButton(
-                  underline: SizedBox(),
+                  underline: const SizedBox(),
                   items: _generateLocaleMenuItems(),
                   onChanged: (value) {
                     _setLocale(value);
@@ -107,7 +107,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
   }
 
   void _setLocale(value) {
-    sl<AppSettings>().setLocale(value);
+    sl<AppSettings>().setLocale(value as String);
   }
 
   String _getTempConfig() {
@@ -160,10 +160,10 @@ class SettingCard extends StatelessWidget {
     return ListTile(
       dense: true,
       isThreeLine: expand != null,
-      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: 18),
+        style: const TextStyle(color: Colors.white, fontSize: 18),
       ),
       subtitle: _subtitle(),
       trailing: Theme(

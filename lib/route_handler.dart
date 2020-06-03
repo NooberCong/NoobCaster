@@ -13,12 +13,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => BlocProvider.value(
           value: BlocProvider.of<WeatherDataBloc>(context),
-          child: SearchRoute(),
+          child: const SearchRoute(),
         ),
       );
     case SETTINGS_ROUTE:
       return MaterialPageRoute(
-        builder: (context) => SettingsRoute(),
+        builder: (context) => const SettingsRoute(),
       );
     default:
       return MaterialPageRoute(builder: (context) => null);

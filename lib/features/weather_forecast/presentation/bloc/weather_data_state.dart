@@ -16,21 +16,21 @@ class WeatherDataLoading extends WeatherDataState {
 
 class WeatherDataLoaded extends WeatherDataState {
   final WeatherData data;
-  WeatherDataLoaded({@required this.data});
+  const WeatherDataLoaded({@required this.data});
   @override
   List<Object> get props => [data];
 }
 
 class WeatherDataError extends WeatherDataState {
   final String message;
-  WeatherDataError({@required this.message});
+  const WeatherDataError({@required this.message});
   @override
   List<Object> get props => [message];
 }
 
 class CacheWeatherDataLoaded extends WeatherDataState {
   final Map<String, dynamic> cachedData;
-  CacheWeatherDataLoaded({@required this.cachedData});
+  const CacheWeatherDataLoaded({@required this.cachedData});
   @override
   List<Object> get props => [cachedData];
 }

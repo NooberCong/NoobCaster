@@ -8,15 +8,6 @@ const Map<int, String> intToDay = {
   7: "Sun"
 };
 
-int _getRawHourFromUnix(int unixtime) {
-  return DateTime.fromMillisecondsSinceEpoch(unixtime * 1000, isUtc: true).hour;
-}
-
-int _getRawMinuteFromUnix(int unixtime) {
-  return DateTime.fromMillisecondsSinceEpoch(unixtime * 1000, isUtc: true)
-      .minute;
-}
-
 String formattedHour(int hour) {
   return hour > 12 ? "${hour - 12} PM" : "$hour AM";
 }

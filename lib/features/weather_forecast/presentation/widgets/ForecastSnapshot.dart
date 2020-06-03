@@ -60,14 +60,14 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(left: 40, bottom: 20),
+          padding: const EdgeInsets.only(left: 40, bottom: 20),
           child: Text(
             _getSnapshotDescription<T>(widget.data.length),
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20),
           decoration: BoxDecoration(
             color: Colors.grey[300].withOpacity(0.2),
             borderRadius: BorderRadius.circular(20),
@@ -77,55 +77,53 @@ class _ForecastSnapshotState<T> extends State<ForecastSnapshot<T>> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              showLeftScroll
-                  ? GestureDetector(
-                      onTap: () =>
-                          _scrollToStartWithDynamicDuration(widget.data.length),
-                      child: Container(
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Theme.of(context).focusColor,
-                          size: 30,
-                        ),
-                      ),
-                    )
-                  : SizedBox(
-                      width: 30,
-                    ),
+              if (showLeftScroll)
+                GestureDetector(
+                  onTap: () =>
+                      _scrollToStartWithDynamicDuration(widget.data.length),
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Theme.of(context).focusColor,
+                    size: 30,
+                  ),
+                )
+              else
+                const SizedBox(
+                  width: 30,
+                ),
               Expanded(
                 child: ListView.builder(
                   controller: _controller,
                   scrollDirection: Axis.horizontal,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemCount: widget.data.length,
                   itemBuilder: (context, index) {
                     if (T == HourlyWeatherData) {
                       return HourlyForecastColumn(
-                          data: (widget.data[index] as HourlyWeatherData),
+                          data: widget.data[index] as HourlyWeatherData,
                           maxTemp: dataMax);
                     } else {
                       return DailyForecastColumn(
-                          data: (widget.data[index] as DailyWeatherData),
+                          data: widget.data[index] as DailyWeatherData,
                           maxRange: dataMax);
                     }
                   },
                 ),
               ),
-              showRightScroll
-                  ? GestureDetector(
-                      onTap: () =>
-                          _scrollToEndWithDynamicDuration(widget.data.length),
-                      child: Container(
-                        child: Icon(
-                          Icons.arrow_forward,
-                          color: Theme.of(context).focusColor,
-                          size: 30,
-                        ),
-                      ),
-                    )
-                  : SizedBox(
-                      width: 30,
-                    ),
+              if (showRightScroll)
+                GestureDetector(
+                  onTap: () =>
+                      _scrollToEndWithDynamicDuration(widget.data.length),
+                  child: Icon(
+                    Icons.arrow_forward,
+                    color: Theme.of(context).focusColor,
+                    size: 30,
+                  ),
+                )
+              else
+                const SizedBox(
+                  width: 30,
+                ),
             ],
           ),
         )
@@ -179,13 +177,13 @@ class HourlyForecastColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             formattedHour(data.hour),
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
           SvgPicture.asset("assets/images/${data.icon}.svg",
               height: 50, width: 50),
@@ -212,12 +210,12 @@ class TempVisualizer extends StatelessWidget {
         children: <Widget>[
           Text(
             tempFromUnit(temp),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.white,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Container(
@@ -244,12 +242,12 @@ class DailyForecastColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(translateWeekDay(data.weekday),
-              style: TextStyle(color: Colors.white, fontSize: 16)),
+              style: const TextStyle(color: Colors.white, fontSize: 16)),
           SvgPicture.asset("assets/images/${data.icon}.svg",
               width: 50, height: 50),
           TempRangeVisualizer(
@@ -283,8 +281,8 @@ class TempRangeVisualizer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(tempFromUnit(maxTemp),
-              style: TextStyle(color: Colors.white, fontSize: 18)),
-          SizedBox(
+              style: const TextStyle(color: Colors.white, fontSize: 18)),
+          const SizedBox(
             height: 5,
           ),
           Center(
@@ -297,11 +295,11 @@ class TempRangeVisualizer extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(tempFromUnit(minTemp),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
               )),

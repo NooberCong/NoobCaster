@@ -86,11 +86,11 @@ class CustomDrawer extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               CachedWeatherCard(
-                data: cachedData["local"],
+                data: cachedData["local"] as WeatherData,
               ),
               Divider(
                 color: Colors.grey[300],
@@ -106,16 +106,16 @@ class CustomDrawer extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Expanded(
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: cachedData["location"].length,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: cachedData["location"].length as int,
                   itemBuilder: (context, index) => CachedWeatherCard(
-                    data: cachedData["location"]
-                        [cachedData["location"].length - index - 1],
+                    data: (cachedData["location"] as List<WeatherData>)[
+                        cachedData["location"].length - index - 1 as int],
                   ),
                 ),
               ),
@@ -140,18 +140,19 @@ class CachedWeatherCard extends StatelessWidget {
     return InkWell(
       onTap: () => _getDrawerWeatherData(context, data),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            data.isLocal
-                ? Icon(
-                    Icons.location_on,
-                    color: Theme.of(context).accentColor,
-                    size: 24,
-                  )
-                : SizedBox(),
-            SizedBox(
+            if (data.isLocal)
+              Icon(
+                Icons.location_on,
+                color: Theme.of(context).accentColor,
+                size: 24,
+              )
+            else
+              const SizedBox(),
+            const SizedBox(
               width: 5,
             ),
             Expanded(
@@ -159,7 +160,9 @@ class CachedWeatherCard extends StatelessWidget {
                 data.displayName,
                 maxLines: 3,
                 style: TextStyle(
-                    color: data.isLocal ? Theme.of(context).accentColor : Colors.white,
+                    color: data.isLocal
+                        ? Theme.of(context).accentColor
+                        : Colors.white,
                     fontSize: 16),
               ),
             ),

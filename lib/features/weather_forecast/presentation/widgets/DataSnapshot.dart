@@ -16,7 +16,7 @@ class DataSnapshot extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        icon,
+        icon as Widget,
         Text(
           "$textUpper\n$textLower",
           textAlign: TextAlign.center,

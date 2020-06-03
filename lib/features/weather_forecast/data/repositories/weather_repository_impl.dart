@@ -103,7 +103,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
   }
 
   bool _isEmpty(List<Placemark> placemarks) {
-    return placemarks.length == 0;
+    return placemarks.isEmpty;
   }
 
   @override

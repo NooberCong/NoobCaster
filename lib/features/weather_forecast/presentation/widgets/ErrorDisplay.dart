@@ -8,7 +8,7 @@ class ErrorDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 40,
         ),
         child: Text(
